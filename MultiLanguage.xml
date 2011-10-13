@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+	<ModulePrefs title="Multi Language Widget" author="elekingmole">
+		<Require feature="setprefs" />
+		<Require feature="dynamic-height" />
+		<Require feature="opensocial-0.9" />
+	</ModulePrefs>
+
+	<UserPref name="content" datatype="string" />
+	<UserPref name="css" datatype="string" />
+	<UserPref name="preprocessjsURL" datatype="string" />
+	<UserPref name="splitword" datatype="string" default_value="----[split]----" />
+
+	<UserPref name="multilanguage" datatype="bool" default_value="false" />
+	<UserPref name="remotedata" datatype="bool" default_value="false" />
+	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
+	<UserPref name="htmlescape" datatype="bool" default_value="false" />
+
+	<Content type="html"><![CDATA[
+<script src="__UP_preprocessjsURL__" type="text/javascript"></script>
+
+<script type="text/javascript">
+	var preprocessjsURL = "__UP_preprocessjsURL__";
+	var splitString = "__UP_splitword__"; 
+	var prefs=new gadgets.Prefs();
+	var lang = getLang();
+	var returnHtml="";
+		
+	function doDisplay(){
+		var cssData = "__UP_css__";
+		var data = getData();
+		
+		if(!(typeof cssData === "undefined")){
+			returnHtml += htmlUnescape(cssData);
+		}
+		
+		if(!(typeof data === "undefined")){
+			if(!(typeof preprocessjsURL === "undefined") && preprocessjsURL.length>0){
+				data = doModify(data);
+			}
+			
+			returnHtml += data;
+		}
+
+		closeHTML();		
+	}
+
+	function closeHTML(){
+	
+		if(prefs.getBool("htmlescape") == false){
+			returnHtml = gadgets.util.unescapeString(returnHtml);
+		}
+	
+		document.getElementById('content_div').innerHTML += returnHtml;
+		
+		if(prefs.getBool("dynamicheight") == true){
+			gadgets.window.adjustHeight();
+		}
+	}
+	
+	function getTargetData(targetData){
+		var tempContent = targetData.split(splitString);
+		var returnContent = tempContent[0].substring(3,tempContent[0].length);//改行込み
+		var diff = 0;
+		
+		for(i=0;i<tempContent.length;i++){
+			for(var diff=0;diff<3;diff++){
+				if(tempContent[i].substring(0+diff,2+diff) == lang ){
+					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
+					break;
+				}
+			}	
+		}
+		return returnContent;
+	}
+
+
+	function getData(){
+		var tempContent;
+		var tempData =  "__UP_content__";
+		var returnContent = tempData;
+	
+		if(prefs.getBool("multilanguage") == true && tempData.indexOf(splitString) != -1){
+			returnContent = getTargetData(tempData);
+		}
+				
+		if(prefs.getBool("remotedata") == true){
+			if(returnContent.substring(0,4)=="http"){
+				getRemoteData(returnContent.substring(0,returnContent.length));
+				return;
+			}else if(returnContent.substring(1,4)=="htt"){
+				getRemoteData(returnContent.substring(1,returnContent.length));
+				return;
+			}
+		}
+		return returnContent;
+	}
+
+	function getRemoteData(contentURL) {
+		var params = {};
+
+		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
+		var url= contentURL;
+		gadgets.io.makeRequest(url, contentresponse, params);
+	}
+
+	function contentresponse(obj){
+		var remoteContentData = obj.text;	
+		
+		if(prefs.getBool("multilanguage") == true && remoteContentData.indexOf(splitString) != -1){
+			remoteContentData = getTargetData(remoteContentData);
+		}
+		
+		if(!(typeof remoteContentData === "undefined")){
+			if(!(typeof preprocessjsURL === "undefined") && preprocessjsURL.length>0){
+				remoteContentData = doModify(remoteContentData);
+			}
+			
+			returnHtml += gadgets.util.escapeString(remoteContentData);
+		}
+		
+		closeHTML();
+	}
+
+	function getLang(){
+		return (navigator.userLanguage||navigator.browserLanguage||navigator.language).substr(0,2);
+	}
+
+	gadgets.util.registerOnLoadHandler(doDisplay);
+</script>
+<div id="content_div"></div>
+]]>
+	</Content>
+
+	<Content type="html" view="configuration" preferred_height="400">
+<![CDATA[
+<script type="text/javascript">
+	var prefs=new gadgets.Prefs();
+
+	function init() {
+		initStringValue(new Array('content','css','splitword','preprocessjsURL'));
+		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','htmlescape'));
+		update();
+	}
+
+	function initStringValue(strs){
+		for (i=0;i<strs.length;i++){
+			var targetvalue=prefs.getString(strs[i]);
+			if (targetvalue.length>0){
+				document.getElementById(strs[i]).value=htmlUnescape(nlUnescape(targetvalue));
+			}
+		}
+	}
+
+	function htmlUnescape(str){
+		str=str.replace(/&gt;/g,'>');
+		str=str.replace(/&lt;/g,'<');
+		str=str.replace(/&#62;/g,'>');
+		str=str.replace(/&#60;/g,'<');
+		str=str.replace(/&#34;/g,'"');
+		str=str.replace(/&quot;/g,'"');
+		str=str.replace(/&#39;/g,"'");
+		
+		return str;
+	}
+
+	function nlUnescape(str){
+		str=str.replace(/&#10;/g,'\r\n');
+		return str;
+	}
+
+	function updatePrefs(strs){
+		for (i=0;i<strs.length;i++){
+			prefs.set(strs[i],document.getElementById(strs[i]).value);
+		}
+	}
+
+	function initBoolValue(blns){
+		for (i=0;i<blns.length;i++){
+			var targetboolean=prefs.getBool(blns[i]);
+			
+			if(targetboolean ==true){
+				document.getElementById(blns[i]).checked=true;
+			}else{
+				document.getElementById(blns[i]).checked=false;
+			}
+		}
+	}
+
+
+	function updatePrefsBln(blns){
+		for (i=0;i<blns.length;i++){
+			if(document.getElementById(blns[i]).checked==true){
+				prefs.set(blns[i],true);
+			}else{
+				prefs.set(blns[i],false);
+			}
+		}
+	}
+
+
+	function update() {
+		updatePrefs(new Array('content','css','splitword','preprocessjsURL'));
+		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','htmlescape'));
+	}
+</script>
+
+<table style="width: 100%;">
+	<tr>
+		<td>
+			<input type="checkbox" id="dynamicheight" onClick="update()">dynamicheight
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="htmlescape" onClick="update()">htmlescape
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="multilanguage" onClick="update()">multilanguage
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="remotedata" onClick="update()">remotedata
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>splitword:</strong>
+		</td>
+		<td>
+			<textarea id="splitword" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>content:</strong>
+		</td>
+		<td>
+			<textarea id="content" style="width: 100%; height: 400px" onchange="update()"></textarea>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<strong>css:</strong>
+		</td>
+		<td>
+			<textarea id="css" style="width: 100%; height: 400px" onchange="update()"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>preprocess script URL:</strong>
+		</td>
+		<td>
+			<textarea id="preprocessjsURL" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	
+</table>
+
+
+<script type="text/javascript">
+	gadgets.util.registerOnLoadHandler(init);
+</script>
+]]>
+	</Content>
+</Module>
