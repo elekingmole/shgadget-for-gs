@@ -529,17 +529,20 @@
 	</tr>
 	<tr>
 		<td>
+			<strong>Demiliter:</strong>
+		</td>
+		<td>
+			<textarea id="ml_splitword" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<input type="checkbox" id="multilanguage" onClick="update()">multilanguage
 		</td>
 	</tr>
 	<tr>
 		<td>
 			<input type="checkbox" id="remotecomment" onClick="update()">remotecomment
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<textarea id="ml_splitword" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
 </table>
