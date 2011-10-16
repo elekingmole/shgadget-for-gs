@@ -623,7 +623,7 @@
 			<strong>MultiLanguageSplitword:</strong>
 		</td>
 		<td>
-			<textarea isplitStringord" style="width: 100%;" onchange="update()"></textarea>
+			<textarea id="ml_splitword" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
 
