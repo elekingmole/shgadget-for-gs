@@ -322,7 +322,7 @@
 							tempCommentArray = commentArray[index][0];
 							if(tempCommentArray[0].match(/^[0-9]+/) && parseInt(tempCommentArray[0]) == i){
 								if(tempCommentArray[1].substring(0,1) == "S"){
-									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length);
+									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
 								}
 							
 								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
