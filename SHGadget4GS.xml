@@ -527,6 +527,21 @@
 			<textarea id="targeturl" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="multilanguage" onClick="update()">multilanguage
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="remotecomment" onClick="update()">remotecomment
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<textarea id="ml_splitword" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
 </table>
 <hr>
 <table style="width: 100%;">
@@ -608,25 +623,6 @@
 			<input type="checkbox" id="urlshow" onClick="update()">URL show
 		</td>
 	</tr>
-	<tr>
-		<td>
-			<input type="checkbox" id="multilanguage" onClick="update()">multilanguage
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="checkbox" id="remotecomment" onClick="update()">remotecomment
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<strong>MultiLanguageSplitword:</strong>
-		</td>
-		<td>
-			<textarea id="ml_splitword" style="width: 100%;" onchange="update()"></textarea>
-		</td>
-	</tr>
-
 </table>
 
 <hr>
@@ -648,7 +644,6 @@
 			<input type="checkbox" id="gutter" onClick="update()">gutter
 		</td>
 	</tr>
-
 </table>
 
 <table style="width: 100%;">
