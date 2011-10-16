@@ -1,0 +1,8 @@
+en
+S0-Hello,A2-(a)...two　,A6-(b)...Good evening
+----[split]----
+ja
+S0-こんにちは,A2-(a)...ni,A6-(b)...こんばんは
+----[split]----
+zh
+S0-你好,A2-(a)...er,A6-(b)...晚上好
