@@ -83,8 +83,12 @@
 		if(!(typeof preprocessjsURL === "undefined") && preprocessjsURL.length>0){
 			str = doModify(str);
 		}
-				
-		strArray = str.split("&#13;&#10;");
+		
+		if(str.indexOf("&#13;&#10;") != -1){
+			strArray = str.split("&#13;&#10;");
+		}else{
+			strArray = str.split("&#10;");
+		}
 				
 		if(targetlineString.length>0){
 			targetlineArray = getTargetline(targetlineString,strArray);
