@@ -328,7 +328,7 @@
 								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
 							
 								if(tempCommentArray[1].substring(0,1) == "A"){
-									returnData= returnData.substring(0,returnData.length-1)+
+									returnData= returnData.substring(0,returnData.length)+
 										tempCommentArray[1].substring(1,tempCommentArray[1].length) + "\r\n";
 								}else if(tempCommentArray[1].substring(0,1) == "N"){
 									returnData+= "\r\n\r\n";
