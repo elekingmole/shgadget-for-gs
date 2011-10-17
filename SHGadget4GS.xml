@@ -323,15 +323,27 @@
 							if(tempCommentArray[0].match(/^[0-9]+/) && parseInt(tempCommentArray[0]) == i){
 								if(tempCommentArray[1].substring(0,1) == "S"){
 									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
-								}
-							
-								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
-							
-								if(tempCommentArray[1].substring(0,1) == "A"){
-									returnData= returnData.substring(0,returnData.length)+
+									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
+									
+									if(index+1 < commentArray.length){
+										tempCommentArray = commentArray[index+1][0];
+										if(tempCommentArray[0].match(/^[0-9]+/) && parseInt(tempCommentArray[0]) == i){
+											if(tempCommentArray[1].substring(0,1) == "A"){
+												returnData+=tempCommentArray[1].substring(1,tempCommentArray[1].length);
+												index+=1;
+											}else if(tempCommentArray[1].substring(0,1) == "N"){
+												returnData+="\r\n";
+												index+=1;
+											}
+										}
+									}
+									
+									returnData+="\r\n";
+								}else if(tempCommentArray[1].substring(0,1) == "A"){
+									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine] +
 										tempCommentArray[1].substring(1,tempCommentArray[1].length) + "\r\n";
 								}else if(tempCommentArray[1].substring(0,1) == "N"){
-									returnData+= "\r\n\r\n";
+									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+"\r\n\r\n";
 								}else{
 									returnData+= "\r\n";
 								}
