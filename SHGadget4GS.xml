@@ -56,7 +56,7 @@
 	function doHighlight(){
 		var cssData = "__UP_css__";
 		if(!(typeof cssData === "undefined")){
-			returnHtml = gadgets.util.unescapeString(cssData);
+			returnHtml = htmlUnescape(cssData);
 		}
 				
 		if(prefs.getBool("urlshow") == true){
@@ -206,6 +206,18 @@
 		if(prefs.getBool("dynamicheight") == true){
 			gadgets.window.adjustHeight();
 		}
+	}
+	
+	function htmlUnescape(str){
+		str=str.replace(/&gt;/g,'>');
+		str=str.replace(/&lt;/g,'<');
+		str=str.replace(/&#62;/g,'>');
+		str=str.replace(/&#60;/g,'<');
+		str=str.replace(/&#34;/g,'"');
+		str=str.replace(/&quot;/g,'"');
+		str=str.replace(/&#39;/g,"'");
+		
+		return str;
 	}
 	
 	function getTargetline(tempTargetlineString,tempStrArray){

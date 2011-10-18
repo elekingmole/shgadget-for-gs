@@ -58,6 +58,19 @@
 		}
 	}
 	
+	function htmlUnescape(str){
+		str=str.replace(/&gt;/g,'>');
+		str=str.replace(/&lt;/g,'<');
+		str=str.replace(/&#62;/g,'>');
+		str=str.replace(/&#60;/g,'<');
+		str=str.replace(/&#34;/g,'"');
+		str=str.replace(/&quot;/g,'"');
+		str=str.replace(/&#39;/g,"'");
+		
+		return str;
+	}
+	
+	
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
 		var returnContent = tempContent[0].substring(3,tempContent[0].length);//改行込み
