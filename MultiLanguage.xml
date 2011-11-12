@@ -11,6 +11,9 @@
 	<UserPref name="preprocessjsURL" datatype="string" />
 	<UserPref name="splitword" datatype="string" default_value="----[split]----" />
 
+	<UserPref name="replaceSpecifier" datatype="string" default_value="[%%]" />
+	<UserPref name="replaceWords" datatype="string" />
+
 	<UserPref name="multilanguage" datatype="bool" default_value="false" />
 	<UserPref name="remotedata" datatype="bool" default_value="false" />
 	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
@@ -87,6 +90,8 @@
 		return returnContent;
 	}
 
+	function getReplaceWords(){
+	}
 
 	function getData(){
 		var tempContent;
@@ -151,7 +156,7 @@
 	var prefs=new gadgets.Prefs();
 
 	function init() {
-		initStringValue(new Array('content','css','splitword','preprocessjsURL'));
+		initStringValue(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
 		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','htmlescape'));
 		update();
 	}
@@ -213,7 +218,7 @@
 
 
 	function update() {
-		updatePrefs(new Array('content','css','splitword','preprocessjsURL'));
+		updatePrefs(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
 		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','htmlescape'));
 	}
 </script>
@@ -247,6 +252,23 @@
 			<textarea id="splitword" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<strong>replaceSpecifier:</strong>
+		</td>
+		<td>
+			<textarea id="replaceSpecifier" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>replaceWords:</strong>
+		</td>
+		<td>
+			<textarea id="replaceWords" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	
 	<tr>
 		<td>
 			<strong>content:</strong>
