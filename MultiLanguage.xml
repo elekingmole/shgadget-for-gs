@@ -11,7 +11,7 @@
 	<UserPref name="preprocessjsURL" datatype="string" />
 	<UserPref name="splitword" datatype="string" default_value="----[split]----" />
 
-	<UserPref name="replaceSpecifier" datatype="string" default_value="[%%]" />
+	<UserPref name="replaceSpecifier" datatype="string" default_value="%--%" />
 	<UserPref name="replaceWords" datatype="string" />
 
 	<UserPref name="multilanguage" datatype="bool" default_value="false" />
@@ -28,18 +28,43 @@
 	var prefs=new gadgets.Prefs();
 	var lang = getLang();
 	var returnHtml="";
-		
+	var boolml = getBln("multilanguage");
+	var boolhe = getBln("htmlescape");
+	
+	function to(object){
+		if(!(typeof object === "undefined")){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function getBln(prefsname){
+		if(prefs.getBool(prefsname) == true){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	
+	
 	function doDisplay(){
 		var cssData = "__UP_css__";
 		var data = getData();
+		var replaceData = getReplaceWords();
 		
-		if(!(typeof cssData === "undefined")){
+		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
 		}
 		
-		if(!(typeof data === "undefined")){
-			if(!(typeof preprocessjsURL === "undefined") && preprocessjsURL.length>0){
+		if(to(data)){
+			if(to(preprocessjsURL) && preprocessjsURL.length>0){
 				data = doModify(data);
+			}
+			
+			if(to(replaceData) && replaceData.length>0){
+				data = doReplaceWords(data,replaceData);
 			}
 			
 			returnHtml += data;
@@ -50,13 +75,13 @@
 
 	function closeHTML(){
 	
-		if(prefs.getBool("htmlescape") == false){
+		if(!(getBln("htmlescape"))){
 			returnHtml = gadgets.util.unescapeString(returnHtml);
 		}
 	
 		document.getElementById('content_div').innerHTML += returnHtml;
 		
-		if(prefs.getBool("dynamicheight") == true){
+		if(getBln("dynamicheight")){
 			gadgets.window.adjustHeight();
 		}
 	}
@@ -76,7 +101,7 @@
 	
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
-		var returnContent = tempContent[0].substring(3,tempContent[0].length);//改行込み
+		var returnContent = tempContent[0].substring(3,tempContent[0].length);
 		var diff = 0;
 		
 		for(i=0;i<tempContent.length;i++){
@@ -91,18 +116,81 @@
 	}
 
 	function getReplaceWords(){
+		var tempReplaceWords;
+		var tempData =  "__UP_replaceWords__";
+		var returnReplaceWords = tempData;
+		
+		if(boolml && tempData.indexOf(splitString) != -1){
+			returnReplaceWords = getTargetData(tempData);
+		}
+				
+		if(getBln("remotedata")){
+			if(returnReplaceWords.substring(0,4)=="http"){
+				getRemoteReplaceWords(returnReplaceWords.substring(0,returnReplaceWords.length));
+				return;
+			}else if(returnContent.substring(1,4)=="htt"){
+				getRemoteReplaceWords(returnReplaceWords.substring(1,returnReplaceWords.length));
+				return;
+			}
+		}
+		return returnReplaceWords;
+		
 	}
+	
+	//あとで
+	//function checkRemoteData(targetData){
+	//	
+	//}
+	function doReplaceWords(targetData,targetReplaceData){
+		var specifier =  "__UP_replaceSpecifier__";
+		var tempWords = "";
+		var replaceWords = "";
+		var tempTargetWord;
+		var tempReplaceWord;
+		var prefix=specifier.substring(0,specifier.length/2);
+		var suffix=specifier.substring(specifier.length/2,specifier.length);;
+		var regexp;
+				
+		if(targetReplaceData.indexOf(specifier+specifier) != -1){
+			tempWords = targetReplaceData.split(specifier+specifier);
+			if(tempWords[1].length>0){
+				if(tempWords[1].indexOf(specifier) != -1){
+					replaceWords = tempWords[1].split(specifier);
+				}
+				for(i=0;i<replaceWords.length;i++){
+					
+					if(replaceWords[i].indexOf("=") != -1){
+						tempTargetWord=replaceWords[i].split("=");
+						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
+						//regexp= new RegExp(tempTargetWord[0],"g");
+						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
+						window.alert(regexp +" : "+tempReplaceWord );
+						window.alert(targetData.replace(regexp,tempReplaceWord));
+						targetData=targetData.replace(regexp,tempReplaceWord);
+					}
+					window.alert(targetData);
+				}
+				
+			} 
+		}
+		
+		return targetData;
+	}
+	
+	function getRemoteReplaceWords(){
+	}
+	
 
 	function getData(){
 		var tempContent;
 		var tempData =  "__UP_content__";
 		var returnContent = tempData;
 	
-		if(prefs.getBool("multilanguage") == true && tempData.indexOf(splitString) != -1){
+		if(boolml && tempData.indexOf(splitString) != -1){
 			returnContent = getTargetData(tempData);
 		}
 				
-		if(prefs.getBool("remotedata") == true){
+		if(getBln("remotedata")){
 			if(returnContent.substring(0,4)=="http"){
 				getRemoteData(returnContent.substring(0,returnContent.length));
 				return;
@@ -125,12 +213,12 @@
 	function contentresponse(obj){
 		var remoteContentData = obj.text;	
 		
-		if(prefs.getBool("multilanguage") == true && remoteContentData.indexOf(splitString) != -1){
+		if(boolml && remoteContentData.indexOf(splitString) != -1){
 			remoteContentData = getTargetData(remoteContentData);
 		}
 		
-		if(!(typeof remoteContentData === "undefined")){
-			if(!(typeof preprocessjsURL === "undefined") && preprocessjsURL.length>0){
+		if(to(remoteContentData)){
+			if(to(preprocessjsURL) && preprocessjsURL.length>0){
 				remoteContentData = doModify(remoteContentData);
 			}
 			
