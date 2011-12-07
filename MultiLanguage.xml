@@ -47,8 +47,6 @@
 		}
 	}
 	
-	
-	
 	function doDisplay(){
 		var cssData = "__UP_css__";
 		var data = getData();
@@ -58,19 +56,22 @@
 			returnHtml += htmlUnescape(cssData);
 		}
 		
-		if(to(data)){
-			if(to(preprocessjsURL) && preprocessjsURL.length>0){
-				data = doModify(data);
-			}
-			
-			if(to(replaceData) && replaceData.length>0){
-				data = doReplaceWords(data,replaceData);
-			}
-			
-			returnHtml += data;
-		}
-
+		returnHtml += changeData(data,replaceData);
 		closeHTML();		
+	}
+
+	function changeData(targetData,targetReplaceData){
+		if(to(targetData)){
+			if(to(preprocessjsURL) && preprocessjsURL.length>0){
+				targetData = doModify(targetData);
+			}
+			
+			if(to(targetReplaceData) && targetReplaceData.length>0){
+				targetData = doReplaceWords(targetData,targetReplaceData);
+			}
+			
+			return targetData;
+		}
 	}
 
 	function closeHTML(){
@@ -126,21 +127,17 @@
 				
 		if(getBln("remotedata")){
 			if(returnReplaceWords.substring(0,4)=="http"){
-				getRemoteReplaceWords(returnReplaceWords.substring(0,returnReplaceWords.length));
+				getRemoteData(returnReplaceWords.substring(0,returnReplaceWords.length),replacewordsresponse);
 				return;
 			}else if(returnContent.substring(1,4)=="htt"){
-				getRemoteReplaceWords(returnReplaceWords.substring(1,returnReplaceWords.length));
+				getRemoteData(returnReplaceWords.substring(1,returnReplaceWords.length),replacewordsresponse);
 				return;
 			}
 		}
 		return returnReplaceWords;
 		
 	}
-	
-	//あとで
-	//function checkRemoteData(targetData){
-	//	
-	//}
+		
 	function doReplaceWords(targetData,targetReplaceData){
 		var specifier =  "__UP_replaceSpecifier__";
 		var tempWords = "";
@@ -158,17 +155,12 @@
 					replaceWords = tempWords[1].split(specifier);
 				}
 				for(i=0;i<replaceWords.length;i++){
-					
 					if(replaceWords[i].indexOf("=") != -1){
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
-						//regexp= new RegExp(tempTargetWord[0],"g");
 						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
-						window.alert(regexp +" : "+tempReplaceWord );
-						window.alert(targetData.replace(regexp,tempReplaceWord));
 						targetData=targetData.replace(regexp,tempReplaceWord);
 					}
-					window.alert(targetData);
 				}
 				
 			} 
@@ -177,9 +169,9 @@
 		return targetData;
 	}
 	
-	function getRemoteReplaceWords(){
-	}
 	
+	function replacewordsresponse(obj){
+	}
 
 	function getData(){
 		var tempContent;
@@ -192,22 +184,22 @@
 				
 		if(getBln("remotedata")){
 			if(returnContent.substring(0,4)=="http"){
-				getRemoteData(returnContent.substring(0,returnContent.length));
+				getRemoteData(returnContent.substring(0,returnContent.length),contentresponse);
 				return;
 			}else if(returnContent.substring(1,4)=="htt"){
-				getRemoteData(returnContent.substring(1,returnContent.length));
+				getRemoteData(returnContent.substring(1,returnContent.length),contentresponse);
 				return;
 			}
 		}
 		return returnContent;
 	}
 
-	function getRemoteData(contentURL) {
+	function getRemoteData(contentURL,handler) {
 		var params = {};
 
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
 		var url= contentURL;
-		gadgets.io.makeRequest(url, contentresponse, params);
+		gadgets.io.makeRequest(url, handler, params);
 	}
 
 	function contentresponse(obj){
@@ -224,7 +216,7 @@
 			
 			returnHtml += gadgets.util.escapeString(remoteContentData);
 		}
-		
+		//returnHtml += gadgets.util.escapeString(changeData(remoteContentData,replaceData));
 		closeHTML();
 	}
 
