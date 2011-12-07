@@ -209,14 +209,7 @@
 			remoteContentData = getTargetData(remoteContentData);
 		}
 		
-		if(to(remoteContentData)){
-			if(to(preprocessjsURL) && preprocessjsURL.length>0){
-				remoteContentData = doModify(remoteContentData);
-			}
-			
-			returnHtml += gadgets.util.escapeString(remoteContentData);
-		}
-		//returnHtml += gadgets.util.escapeString(changeData(remoteContentData,replaceData));
+		returnHtml += gadgets.util.escapeString(changeData(remoteContentData,""));
 		closeHTML();
 	}
 
