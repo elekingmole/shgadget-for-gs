@@ -16,6 +16,7 @@
 
 	<UserPref name="multilanguage" datatype="bool" default_value="false" />
 	<UserPref name="remotedata" datatype="bool" default_value="false" />
+	<UserPref name="remotereplacedata" datatype="bool" default_value="false" />
 	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
 	<UserPref name="htmlescape" datatype="bool" default_value="false" />
 
@@ -25,11 +26,137 @@
 <script type="text/javascript">
 	var preprocessjsURL = "__UP_preprocessjsURL__";
 	var splitString = "__UP_splitword__"; 
+	var cssData = "__UP_css__";
 	var prefs=new gadgets.Prefs();
 	var lang = getLang();
 	var returnHtml="";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
+	var contentData;
+	var replaceData;
+	
+	
+	function doDisplay(){
+		if(to(cssData)){
+			returnHtml += htmlUnescape(cssData);
+		}
+		
+		setupData();
+	}
+	
+	function setupData(){
+		var tempData =  "__UP_content__";
+		contentData = tempData;
+		
+		if(boolml && tempData.indexOf(splitString) != -1){
+			contentData = getTargetData(tempData);
+		}
+		
+		if(getBln("remotedata")){
+			if(contentData.substring(0,4)=="http"){
+				getRemoteData(contentData.substring(0,contentData.length),getContentData);
+				return;
+			}else if(contentData.substring(1,4)=="htt"){
+				getRemoteData(contentData.substring(1,contentData.length),getContentData);
+				return;
+			}
+		}else{
+			setupReplaceData();
+			return;
+		}
+	}
+	
+	function getContentData(obj){
+		contentData = obj.text;	
+		
+		if(boolml && contentData.indexOf(splitString) != -1){
+			contentData = getTargetData(contentData);
+		}
+		setupReplaceData();
+	}
+	
+	function setupReplaceData(){
+		var tempData =  "__UP_replaceWords__";
+		replaceData = tempData;
+		
+		if(boolml && tempData.indexOf(splitString) != -1){
+			replaceData = getTargetData(tempData);
+		}
+				
+		if(getBln("remotereplacedata")){
+			if(replaceData.substring(0,4)=="http"){
+				getRemoteData(replaceData.substring(0,replaceData.length),getReplaceData);
+				return;
+			}else if(replaceData.substring(1,4)=="htt"){
+				getRemoteData(replaceData.substring(1,replaceData.length),getReplaceData);
+				return;
+			}
+		}else{
+			doProcessData();
+			return;
+		}
+	}
+	
+	function getReplaceData(obj){
+		replaceData = obj.text;	
+		
+		if(boolml && replaceData.indexOf(splitString) != -1){
+			replaceData = getTargetData(replaceData);
+		}
+		doProcessData();
+	}
+	
+	function doProcessData(){
+		returnHtml += changeData();
+		closeHTML();
+	}
+	
+	function changeData(){
+		if(to(contentData)){
+			if(to(preprocessjsURL) && preprocessjsURL.length>0){
+				contentData = doModify(contentData);
+			}
+			
+			if(to(replaceData) && replaceData.length>0){
+				//window.alert("doReplace");
+				contentData = doReplaceWords();
+			}
+			
+			return contentData;
+		}
+	}
+	
+	function doReplaceWords(){
+		var specifier =  "__UP_replaceSpecifier__";
+		var tempWords = "";
+		var replaceWords = "";
+		var tempTargetWord;
+		var tempReplaceWord;
+		var prefix=specifier.substring(0,specifier.length/2);
+		var suffix=specifier.substring(specifier.length/2,specifier.length);;
+		var regexp;
+				
+		if(replaceData.indexOf(specifier+specifier) != -1){
+			tempWords = replaceData.split(specifier+specifier);
+			if(tempWords[1].length>0){
+				if(tempWords[1].indexOf(specifier) != -1){
+					replaceWords = tempWords[1].split(specifier);
+				}
+				for(i=0;i<replaceWords.length;i++){
+					
+					if(replaceWords[i].indexOf("=") != -1){
+						tempTargetWord=replaceWords[i].split("=");
+						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
+						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
+						contentData=contentData.replace(regexp,tempReplaceWord);
+					}
+				}
+				
+			} 
+		}
+		
+		return contentData;
+	}
 	
 	function to(object){
 		if(!(typeof object === "undefined")){
@@ -47,32 +174,7 @@
 		}
 	}
 	
-	function doDisplay(){
-		var cssData = "__UP_css__";
-		var data = getData();
-		var replaceData = getReplaceWords();
-		
-		if(to(cssData)){
-			returnHtml += htmlUnescape(cssData);
-		}
-		
-		returnHtml += changeData(data,replaceData);
-		closeHTML();		
-	}
-
-	function changeData(targetData,targetReplaceData){
-		if(to(targetData)){
-			if(to(preprocessjsURL) && preprocessjsURL.length>0){
-				targetData = doModify(targetData);
-			}
-			
-			if(to(targetReplaceData) && targetReplaceData.length>0){
-				targetData = doReplaceWords(targetData,targetReplaceData);
-			}
-			
-			return targetData;
-		}
-	}
+	
 
 	function closeHTML(){
 	
@@ -115,85 +217,7 @@
 		}
 		return returnContent;
 	}
-
-	function getReplaceWords(){
-		var tempReplaceWords;
-		var tempData =  "__UP_replaceWords__";
-		var returnReplaceWords = tempData;
-		
-		if(boolml && tempData.indexOf(splitString) != -1){
-			returnReplaceWords = getTargetData(tempData);
-		}
-				
-		if(getBln("remotedata")){
-			if(returnReplaceWords.substring(0,4)=="http"){
-				getRemoteData(returnReplaceWords.substring(0,returnReplaceWords.length),replacewordsresponse);
-				return;
-			}else if(returnContent.substring(1,4)=="htt"){
-				getRemoteData(returnReplaceWords.substring(1,returnReplaceWords.length),replacewordsresponse);
-				return;
-			}
-		}
-		return returnReplaceWords;
-		
-	}
-		
-	function doReplaceWords(targetData,targetReplaceData){
-		var specifier =  "__UP_replaceSpecifier__";
-		var tempWords = "";
-		var replaceWords = "";
-		var tempTargetWord;
-		var tempReplaceWord;
-		var prefix=specifier.substring(0,specifier.length/2);
-		var suffix=specifier.substring(specifier.length/2,specifier.length);;
-		var regexp;
-				
-		if(targetReplaceData.indexOf(specifier+specifier) != -1){
-			tempWords = targetReplaceData.split(specifier+specifier);
-			if(tempWords[1].length>0){
-				if(tempWords[1].indexOf(specifier) != -1){
-					replaceWords = tempWords[1].split(specifier);
-				}
-				for(i=0;i<replaceWords.length;i++){
-					if(replaceWords[i].indexOf("=") != -1){
-						tempTargetWord=replaceWords[i].split("=");
-						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
-						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
-						targetData=targetData.replace(regexp,tempReplaceWord);
-					}
-				}
-				
-			} 
-		}
-		
-		return targetData;
-	}
 	
-	
-	function replacewordsresponse(obj){
-	}
-
-	function getData(){
-		var tempContent;
-		var tempData =  "__UP_content__";
-		var returnContent = tempData;
-	
-		if(boolml && tempData.indexOf(splitString) != -1){
-			returnContent = getTargetData(tempData);
-		}
-				
-		if(getBln("remotedata")){
-			if(returnContent.substring(0,4)=="http"){
-				getRemoteData(returnContent.substring(0,returnContent.length),contentresponse);
-				return;
-			}else if(returnContent.substring(1,4)=="htt"){
-				getRemoteData(returnContent.substring(1,returnContent.length),contentresponse);
-				return;
-			}
-		}
-		return returnContent;
-	}
-
 	function getRemoteData(contentURL,handler) {
 		var params = {};
 
@@ -201,18 +225,7 @@
 		var url= contentURL;
 		gadgets.io.makeRequest(url, handler, params);
 	}
-
-	function contentresponse(obj){
-		var remoteContentData = obj.text;	
 		
-		if(boolml && remoteContentData.indexOf(splitString) != -1){
-			remoteContentData = getTargetData(remoteContentData);
-		}
-		
-		returnHtml += gadgets.util.escapeString(changeData(remoteContentData,""));
-		closeHTML();
-	}
-
 	function getLang(){
 		return (navigator.userLanguage||navigator.browserLanguage||navigator.language).substr(0,2);
 	}
@@ -230,7 +243,7 @@
 
 	function init() {
 		initStringValue(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','htmlescape'));
+		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','htmlescape'));
 		update();
 	}
 
@@ -292,7 +305,7 @@
 
 	function update() {
 		updatePrefs(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','htmlescape'));
+		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','htmlescape'));
 	}
 </script>
 
@@ -317,6 +330,12 @@
 			<input type="checkbox" id="remotedata" onClick="update()">remotedata
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="remotereplacedata" onClick="update()">remotereplacedata
+		</td>
+	</tr>
+	
 	<tr>
 		<td>
 			<strong>splitword:</strong>
