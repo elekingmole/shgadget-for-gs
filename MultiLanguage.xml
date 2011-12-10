@@ -52,16 +52,21 @@
 			contentData = getTargetData(tempData);
 		}
 		
-		if(getBln("remotedata")){
-			if(contentData.substring(0,4)=="http"){
-				getRemoteData(contentData.substring(0,contentData.length),getContentData);
+		doFork("remotedata",contentData,getContentData,setupReplaceData);
+		
+	}
+	
+	function doFork(targetBln,targeData,async,defaultMethod){
+		if(getBln(targetBln)){
+			if(targeData.substring(0,4)=="http"){
+				getRemoteData(targeData.substring(0,targeData.length),async);
 				return;
-			}else if(contentData.substring(1,4)=="htt"){
-				getRemoteData(contentData.substring(1,contentData.length),getContentData);
+			}else if(targeData.substring(1,4)=="htt"){
+				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
 		}else{
-			setupReplaceData();
+			defaultMethod;
 			return;
 		}
 	}
@@ -82,19 +87,9 @@
 		if(boolml && tempData.indexOf(splitString) != -1){
 			replaceData = getTargetData(tempData);
 		}
-				
-		if(getBln("remotereplacedata")){
-			if(replaceData.substring(0,4)=="http"){
-				getRemoteData(replaceData.substring(0,replaceData.length),getReplaceData);
-				return;
-			}else if(replaceData.substring(1,4)=="htt"){
-				getRemoteData(replaceData.substring(1,replaceData.length),getReplaceData);
-				return;
-			}
-		}else{
-			doProcessData();
-			return;
-		}
+		
+		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);
+			
 	}
 	
 	function getReplaceData(obj){
@@ -118,7 +113,6 @@
 			}
 			
 			if(to(replaceData) && replaceData.length>0){
-				//window.alert("doReplace");
 				contentData = doReplaceWords();
 			}
 			
