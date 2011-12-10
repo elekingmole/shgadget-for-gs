@@ -55,11 +55,11 @@
 	
 	function doHighlight(){
 		var cssData = "__UP_css__";
-		if(!(typeof cssData === "undefined")){
+		if(to(cssData)){
 			returnHtml = htmlUnescape(cssData);
 		}
 				
-		if(prefs.getBool("urlshow") == true){
+		if(getBln("urlshow")){
 			returnHtml +="<a href='__UP_targeturl__' target='_blank'>__UP_targeturl__</a>"+"\n\n";
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' __UP_shtitleValue__ >";
@@ -80,7 +80,7 @@
 		var commentArray;
 		var targetlineString = "__UP_targetline__";
 		
-		if(!(typeof preprocessjsURL === "undefined") && preprocessjsURL.length>0){
+		if(to(preprocessjsURL)){
 			str = doModify(str);
 		}
 		
@@ -90,13 +90,13 @@
 			strArray = str.split("&#10;");
 		}
 				
-		if(targetlineString.length>0){
+		if(to(targetlineString)){
 			targetlineArray = getTargetline(targetlineString,strArray);
 		}else{
 			targetlineArray = getTargetline("0-",strArray);
 		}
 		
-		if(!(typeof commentbase === "undefined") && commentbase.length>0){
+		if(to(commentbase)){
 			commentArray = getCommentData(commentbase);
 		}else{
 			commentArray = new Array();
@@ -129,11 +129,11 @@
 		var returnContent = targetComment;
 		var diff=0;
 		        
-		if(prefs.getBool("multilanguage") == true && targetComment.indexOf(splitString) != -1){
+		if(getBln("multilanguage") && targetComment.indexOf(splitString) != -1){
 			targetComment = getTargetData(targetComment);
 		}
 		
-		if(prefs.getBool("remotecomment") == true && targetComment.substring(0,4)=="http" ){
+		if(getBln("remotecomment") && targetComment.substring(0,4)=="http" ){
 			getRemoteComment(targetComment.substring(0,targetComment.length));
 			return;
 		}else{
@@ -167,13 +167,13 @@
 		var commentbase;
 		var diff=0;
 		
-		if(prefs.getBool("multilanguage") == true && remoteContentData.indexOf(splitString) != -1){
+		if(getBln("multilanguage") && remoteContentData.indexOf(splitString) != -1){
 			commentbase=getTargetData(remoteContentData);
 		}else{
         	commentbase=remoteContentData;
 		}
 		
-		if(!(typeof commentbase === "undefined") && commentbase.length>0){
+		if(to(commentbase)){
 			commentArray = getCommentData(commentbase);
 		}else{
 			commentArray = new Array();
@@ -203,7 +203,7 @@
 		SyntaxHighlighter.autoloader('__UP_languagelower__                   __UP_baseurljs__/shBrush__UP_language__.js');
 		SyntaxHighlighter.all();
 		
-		if(prefs.getBool("dynamicheight") == true){
+		if(getBln("dynamicheight")){
 			gadgets.window.adjustHeight();
 		}
 	}
@@ -253,7 +253,7 @@
 		var tempUnfoldedArray;
 		for(t= 0;t<= tempTargetlineArray.length;t++){
 			tempUnfoldedArray = new Array();
-			if(!(typeof tempTargetlineArray[t] === "undefined")){
+			if(to(tempTargetlineArray[t])){
 				
 				if(tempTargetlineArray[t].indexOf("-") != -1 ){
 					var tempNumber = tempTargetlineArray[t].split("-");
@@ -276,12 +276,12 @@
 				}
 				
 				for(x= 0;x<= tempUnfoldedArray.length;x++){
-					if(!(typeof tempUnfoldedArray[x] === "undefined")){
+					if(to(tempUnfoldedArray[x])){
 						if(tempUnfoldedArray[x].indexOf(",") != -1){
 							var tempSplitArray = tempUnfoldedArray[x].split(",");
 					
 							for(w= 0;w<= tempSplitArray.length;w++){
-								if(!(typeof tempSplitArray[w] === "undefined")){
+								if(to(tempSplitArray[w])){
 									returnTargetlineArray.push(tempSplitArray[w]);
 								}
 							}
@@ -308,6 +308,23 @@
 		return unfoldedTargetline.split(",");
 	}
 
+	function to(object){
+		if(!(typeof object === "undefined") && object.length>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function getBln(prefsname){
+		if(prefs.getBool(prefsname) == true){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+
 	function matchNumber(targetString){
 		if(targetString.match(/^[0-9]+/)){
 			return true;
@@ -328,7 +345,7 @@
 
 		for (i=0;i<targetlineArray.length;i++){
 			if(targetlineArray[i].match(/^[0-9]+/)){
-				if(!(typeof strArray[parseInt(targetlineArray[i]) + baseLine] === "undefined")){
+				if(to(strArray[parseInt(targetlineArray[i]) + baseLine])){
 					if(commentArray.length>0 ){
 						if(index < commentArray.length){
 							tempCommentArray = commentArray[index][0];
