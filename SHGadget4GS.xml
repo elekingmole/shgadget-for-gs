@@ -53,6 +53,21 @@
 	var strArray;
 	var returnHtml="";
 	
+	function doFork(targetBln,targeData,async,defaultMethod){
+		if(getBln(targetBln)){
+			if(targeData.substring(0,4)=="http"){
+				getRemoteData(targeData.substring(0,targeData.length),async);
+				return;
+			}else if(targeData.substring(1,4)=="htt"){
+				getRemoteData(targeData.substring(1,targeData.length),async);
+				return;
+			}
+		}else{
+			defaultMethod;
+			return;
+		}
+	}
+	
 	function doHighlight(){
 		var cssData = "__UP_css__";
 		if(to(cssData)){
@@ -64,17 +79,17 @@
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' __UP_shtitleValue__ >";
 		
-		getData();
+		setupData();
 	}
-
-	function getData() {
+	
+	function setupData(){
 		var params = {};
-		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
 		var url= "__UP_targeturl__";
-		gadgets.io.makeRequest(url, response, params);
+		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
+		gadgets.io.makeRequest(url, getCodeData, params);
 	}
 
-	function response(obj) {
+	function getCodeData(obj) {
 		var str = gadgets.util.escapeString(obj.text);
 		var commentbase = "__UP_comment__";
 		var commentArray;
@@ -103,6 +118,31 @@
 		}	
 		
 		returnHtml+=processTargetlineData(targetlineArray,strArray,commentArray);
+		closeHTML();
+	}
+
+
+
+	function doFork(targetBln,targeData,async,defaultMethod){
+		if(getBln(targetBln)){
+			if(targeData.substring(0,4)=="http"){
+				getRemoteData(targeData.substring(0,targeData.length),async);
+				return;
+			}else if(targeData.substring(1,4)=="htt"){
+				getRemoteData(targeData.substring(1,targeData.length),async);
+				return;
+			}
+		}else{
+			defaultMethod;
+			return;
+		}
+	}
+
+
+
+
+	function doProcessData(){
+		returnHtml += changeData();
 		closeHTML();
 	}
 
