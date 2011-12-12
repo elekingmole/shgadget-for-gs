@@ -32,8 +32,8 @@
 	var returnHtml="";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
-	var contentData;
-	var replaceData;
+	var contentData="";
+	var replaceData="";
 		
 	function doDisplay(){
 		if(to(cssData)){
@@ -49,6 +49,7 @@
 		if(boolml && tempData.indexOf(splitString) != -1){
 			contentData = getTargetData(tempData);
 		}
+		
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
 		
@@ -140,6 +141,7 @@
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
 						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
+						window.alert("regexp"+regexp);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -159,7 +161,7 @@
 				return;
 			}
 		}else{
-			defaultMethod;
+			defaultMethod();
 			return;
 		}
 	}
