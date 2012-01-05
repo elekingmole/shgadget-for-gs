@@ -17,6 +17,7 @@
 	<UserPref name="multilanguage" datatype="bool" default_value="false" />
 	<UserPref name="remotedata" datatype="bool" default_value="false" />
 	<UserPref name="remotereplacedata" datatype="bool" default_value="false" />
+	<UserPref name="simplereplace" datatype="bool" default_value="false" />
 	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
 	<UserPref name="htmlescape" datatype="bool" default_value="false" />
 
@@ -32,8 +33,8 @@
 	var returnHtml="";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
-	var contentData="";
-	var replaceData="";
+	var contentData="__UP_content__";
+	var replaceData="__UP_replaceWords__";
 		
 	function doDisplay(){
 		if(to(cssData)){
@@ -41,15 +42,9 @@
 		}
 		setupData();
 	}
-	
+		
 	function setupData(){
-		var tempData =  "__UP_content__";
-		contentData = tempData;
-		
-		if(boolml && tempData.indexOf(splitString) != -1){
-			contentData = getTargetData(tempData);
-		}
-		
+		contentData = getTargetLangData(contentData,"Content not specified.");
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
 		
@@ -63,15 +58,8 @@
 	}
 	
 	function setupReplaceData(){
-		var tempData =  "__UP_replaceWords__";
-		replaceData = tempData;
-		
-		if(boolml && tempData.indexOf(splitString) != -1){
-			replaceData = getTargetData(tempData);
-		}
-		
+		replaceData = getTargetLangData(replaceData,"");
 		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);
-			
 	}
 	
 	function getReplaceData(obj){
@@ -140,8 +128,13 @@
 					if(replaceWords[i].indexOf("=") != -1){
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
-						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
-						window.alert("regexp"+regexp);
+						if(getBln("simplereplace")){
+							regexp= new RegExp(tempTargetWord[0],"g");
+						}else{
+							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
+						}
+						
+						window.alert("tempTargetWord[0] "+tempTargetWord[0]+ " regexp"+regexp);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -149,6 +142,18 @@
 		}
 		
 		return contentData;
+	}
+	
+	function getTargetLangData(sourceData,returnMessage){
+		if(to(sourceData)){
+			if(boolml && sourceData.indexOf(splitString) != -1){
+				sourceData = getTargetData(sourceData);
+			}
+		}else{
+			sourceData = returnMessage;
+		}
+		
+		return sourceData;
 	}
 	
 	function doFork(targetBln,targeData,async,defaultMethod){
@@ -251,7 +256,7 @@
 
 	function init() {
 		initStringValue(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','htmlescape'));
+		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','simplereplace','htmlescape'));
 		update();
 	}
 
@@ -313,7 +318,7 @@
 
 	function update() {
 		updatePrefs(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','htmlescape'));
+		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','simplereplace','htmlescape'));
 	}
 </script>
 
@@ -343,7 +348,11 @@
 			<input type="checkbox" id="remotereplacedata" onClick="update()">remotereplacedata
 		</td>
 	</tr>
-	
+	<tr>
+		<td>
+			<input type="checkbox" id="simplereplace" onClick="update()">simplereplace
+		</td>
+	</tr>
 	<tr>
 		<td>
 			<strong>splitword:</strong>
