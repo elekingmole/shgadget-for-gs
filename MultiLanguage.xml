@@ -25,17 +25,17 @@
 <script src="__UP_preprocessjsURL__" type="text/javascript"></script>
 
 <script type="text/javascript">
-	var preprocessjsURL = "__UP_preprocessjsURL__";
-	var splitString = "__UP_splitword__"; 
+	var contentData="__UP_content__";
 	var cssData = "__UP_css__";
-	var prefs=new gadgets.Prefs();
+	var preprocessjsURL = "__UP_preprocessjsURL__";
+	var replaceData="__UP_replaceWords__";
+	var splitString = "__UP_splitword__"; 
 	var lang = getLang();
+	var prefs=new gadgets.Prefs();
 	var returnHtml="";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
-	var contentData="__UP_content__";
-	var replaceData="__UP_replaceWords__";
-		
+			
 	function doDisplay(){
 		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
@@ -134,7 +134,6 @@
 							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
 						}
 						
-						window.alert("tempTargetWord[0] "+tempTargetWord[0]+ " regexp"+regexp);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}

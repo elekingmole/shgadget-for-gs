@@ -6,10 +6,8 @@
 		<Require feature="opensocial-0.9" />
 	</ModulePrefs>
 
-	<UserPref name="baseurljs" datatype="string"
-		default_value="http://alexgorbatchev.com/pub/sh/current/scripts" />
-	<UserPref name="baseurlcss" datatype="string"
-		default_value="http://alexgorbatchev.com/pub/sh/current/styles" />
+	<UserPref name="baseurljs" datatype="string" default_value="http://alexgorbatchev.com/pub/sh/current/scripts" />
+	<UserPref name="baseurlcss" datatype="string" default_value="http://alexgorbatchev.com/pub/sh/current/styles" />
 	<UserPref name="preprocessjsURL" datatype="string" />
 	<UserPref name="language" datatype="string" />
 	<UserPref name="languagelower" datatype="string" />
@@ -18,25 +16,25 @@
 	<UserPref name="baseline" datatype="string" default_value="0" />
 	<UserPref name="targetline" datatype="string" />
 	<UserPref name="comment" datatype="string" />
-	<UserPref name="css" datatype="string" />
-	<UserPref name="urlshow" datatype="bool" default_value="false" />
-	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
 	<UserPref name="firstline" datatype="string" />
 	<UserPref name="highlight" datatype="string" />
 	<UserPref name="tabsize" datatype="string" />
 	<UserPref name="shtitle" datatype="string" />
-	<UserPref name="shtitleValue" datatype="string" />
 	<UserPref name="shOption" datatype="string" />
+	<UserPref name="splitword" datatype="string" default_value="----[split]----" />
+	<UserPref name="replacespecifier" datatype="string" default_value="%--%" />
+	<UserPref name="replacewords" datatype="string" />
+	<UserPref name="blnSetting" datatype="string" />
+	<UserPref name="remotedata" datatype="bool" default_value="false" />
+	<UserPref name="urlshow" datatype="bool" default_value="false" />
+	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
 	<UserPref name="collapse" datatype="bool" default_value="false" />
 	<UserPref name="gutter" datatype="bool" default_value="false" />
 	<UserPref name="multilanguage" datatype="bool" default_value="false" />
-	<UserPref name="ml_splitword" datatype="string" default_value="----[split]----" />
-	<UserPref name="remotecomment" datatype="bool" default_value="false" />
-	<UserPref name="remotedata" datatype="bool" default_value="false" />
 	<UserPref name="remotereplacedata" datatype="bool" default_value="false" />
-	<UserPref name="shbrushxml" datatype="string" />
-
-	<Content type="html"><![CDATA[
+	<UserPref name="remotecomment" datatype="bool" default_value="false" />
+	
+<Content type="html"><![CDATA[
 
 <link type="text/css" href="__UP_baseurlcss__/shCore.css" rel="stylesheet"/>
 <link type="text/css" href="__UP_baseurlcss__/shTheme__UP_theme__.css" rel="stylesheet"/>
@@ -47,19 +45,31 @@
 
 <script type="text/javascript">
 	var preprocessjsURL = "__UP_preprocessjsURL__";
-	var splitString = "__UP_ml_splitword__";
+	var splitString = "__UP_splitword__";
 	var prefs=new gadgets.Prefs();
     var lang= getLang();
 	var targetlineArray = new Array();
 	var strArray;
 	var returnHtml="";
-	var cssData = "__UP_css__";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
-	var contentData="";
-	var replaceData="";
-	var commentData="";
+	var contentData="__UP_content__";
+	var replaceData="__UP_replacewords__";
+	var commentData="__UP_comment__";
 	var commentArray;
+	
+	
+	function getTargetLangData(sourceData,returnMessage){
+		if(to(sourceData)){
+			if(boolml && sourceData.indexOf(splitString) != -1){
+				sourceData = getTargetData(sourceData);
+			}
+		}else{
+			sourceData = returnMessage;
+		}
+		
+		return sourceData;
+	}
 	
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
@@ -78,32 +88,22 @@
 	}
 	
 	function doHighlight(){
-		if(to(cssData)){
-			returnHtml = htmlUnescape(cssData);
-		}
-				
 		if(getBln("remotedata") && getBln("urlshow")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
-		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' __UP_shtitleValue__ >";
+		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
 		
 		setupData();
 	}
 	
 	function setupData(){
-		var tempData =  "__UP_content__";
-		contentData = tempData;
-		
-		if(boolml && tempData.indexOf(splitString) != -1){
-			contentData = getTargetData(tempData);
-		}
-		
+		//window.alert("1");
+		contentData = getTargetLangData(contentData,"Content not specified.");
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
 
 	function getContentData(obj){
 		contentData = obj.text;	
-		
 		if(boolml && contentData.indexOf(splitString) != -1){
 			contentData = getTargetData(contentData);
 		}
@@ -111,16 +111,9 @@
 	}
 
 	function setupReplaceData(){
-		
-		var tempData =  "__UP_replaceWords__";
-		replaceData = tempData;
-		
-		if(boolml && tempData.indexOf(splitString) != -1){
-			replaceData = getTargetData(tempData);
-		}
-		
+		//window.alert("2");
+		replaceData = getTargetLangData(replaceData,"");
 		doFork("remotereplacedata",replaceData,getReplaceData,setupCommentData);
-			
 	}
 
 	function getReplaceData(obj){
@@ -133,15 +126,8 @@
 	}
 
 	function setupCommentData(){
-		
-		
-		var tempData =  "__UP_comment__";
-		commentData = tempData;
-		
-		if(boolml && tempData.indexOf(splitString) != -1){
-			commentData = getTargetData(tempData);
-		}
-		
+		commentData = getTargetLangData(commentData,"");
+		window.alert(replaceData);
 		doFork("remotecomment",commentData,getCommentData,doProcessData);
 	}
 
@@ -155,13 +141,12 @@
 	}
 
 	function doProcessData(){
-	//window.alert("doProcess");
+		//window.alert("4");
 		returnHtml += changeData();
 		closeHTML();
 	}
 
 	function changeData(){
-		//window.alert("contentData: "+contentData);
 		if(to(contentData)){
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
@@ -176,7 +161,7 @@
 	}
 
 	function doReplaceWords(){
-		var specifier =  "__UP_replaceSpecifier__";
+		var specifier =  "__UP_replacespecifier__";
 		var tempWords = "";
 		var replaceWords = "";
 		var tempTargetWord;
@@ -184,7 +169,8 @@
 		var prefix=specifier.substring(0,specifier.length/2);
 		var suffix=specifier.substring(specifier.length/2,specifier.length);;
 		var regexp;
-				
+			
+		
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
 			
@@ -214,7 +200,7 @@
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
 						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
-						window.alert("regexp"+regexp);
+						//window.alert("regexp"+regexp);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -232,7 +218,7 @@
 		var returnContent = targetComment;
 		var diff=0;
 		        
-		if(getBln("multilanguage") && targetComment.indexOf(splitString) != -1){
+		if(boolml && targetComment.indexOf(splitString) != -1){
 			targetComment = getTargetData(targetComment);
 		}
 		
@@ -308,6 +294,14 @@
 		}
 	}
 
+	function getRemoteData(contentURL,handler) {
+		var params = {};
+		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
+		var url= contentURL;
+		gadgets.io.makeRequest(url, handler, params);
+	}
+
+
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
 		var returnContent = tempContent[0].substring(3,tempContent[0].length);
@@ -338,7 +332,7 @@
 		var commentbase;
 		var diff=0;
 		
-		if(getBln("multilanguage") && remoteContentData.indexOf(splitString) != -1){
+		if(boolml && remoteContentData.indexOf(splitString) != -1){
 			commentbase=getTargetData(remoteContentData);
 		}else{
         	commentbase=remoteContentData;
@@ -583,13 +577,13 @@
 <![CDATA[
 <script type="text/javascript">
 	var prefs=new gadgets.Prefs();
-
+	var blnSetting = "__UP_blnSetting__"
 	function init() {
 	
-		initStringValue(new Array('baseurljs','baseurlcss','content','targetline','baseline','comment','css',
-		'firstline','highlight','tabsize','shtitle','language','theme','ml_splitword',"preprocessjsURL"));
+		initStringValue(new Array('baseurljs','baseurlcss','content','targetline','baseline','comment',
+		'firstline','highlight','tabsize','shtitle','language','theme','replacespecifier','replacewords','preprocessjsURL','splitword'));
 	
-		initBoolValue(new Array('dynamicheight','urlshow','collapse','gutter','multilanguage','remotedata','remotereplacedata','remotecomment'));
+		initBoolValueEx(new Array("multilanguage///M","remotedata///D","remotereplacedata///R","remotecomment///C","urlshow///U","dynamicheight///H","gutter///G","collapse///P"));
 	
 		update();
 	}
@@ -604,6 +598,25 @@
 			}
 		}
 	}
+	
+	function initBoolValueEx(blns){
+		var tempString;
+		for (i=0;i<blns.length;i++){
+			tempString = blns[i].split("///");
+			setElementValue(tempString[0],tempString[1],blnSetting);
+			
+			if(blnSetting.indexOf(tempString[1]) != -1){
+				document.getElementById(tempString[0]).checked=true;
+			}else{
+				document.getElementById(tempString[0]).checked=false;
+			}
+		}
+	}
+
+	function setElementValue(name,word,settings){
+		
+	}
+
 
 	function initStringValue(strs){
 		for (i=0;i<strs.length;i++){
@@ -630,11 +643,31 @@
 		}
 	}
 
+
+	function updatePrefsBlnEx(blns){
+		var tempString;
+		var tempSetting="";
+		for (i=0;i<blns.length;i++){
+			tempString = blns[i].split("///");
+			
+			
+			if(document.getElementById(tempString[0]).checked==true){
+				tempSetting += tempSetting[1];
+			}
+		}
+		prefs.set('blnSetting',tempSetting);
+	}
+	
+	
+
 	function update() {
-		updatePrefs(new Array('language','theme','baseurljs','baseurlcss','content','baseline','comment','css',
-						'targetline','firstline','highlight','tabsize','shtitle','ml_splitword','preprocessjsURL'));
+		updatePrefs(new Array('language','theme','baseurljs','baseurlcss','content','baseline','comment',
+						'targetline','firstline','highlight','tabsize','shtitle','replacespecifier','replacewords','preprocessjsURL','splitword'));
+
+
+
 		
-		updatePrefsBln(new Array('dynamicheight','urlshow','collapse','gutter','multilanguage','remotedata','remotereplacedata','remotecomment'));
+		updatePrefsBlnEx(new Array("multilanguage///M","remotedata///D","remotereplacedata///R","remotecomment///C","urlshow///U","dynamicheight///H","gutter///G","collapse///P"));
 
 		var shOption ="";
 	
@@ -657,13 +690,7 @@
 		if(prefs.getString('tabsize').length>0){
 			shOption +=  " tab-size: " + prefs.getString('tabsize') + ";";
 		}
-
-		if(prefs.getString('shtitle').length>0){
-			prefs.set('shtitleValue', 'title="'+ prefs.getString('shtitle') +'"' );
-		}else{
-			prefs.set('shtitleValue',"");
-		}
-
+		
 		prefs.set('languagelower', document.getElementById('language').value.toLowerCase());	
 		prefs.set('shOption',shOption);
 	}
@@ -672,6 +699,26 @@
 </script>
 
 <table style="width: 100%;">
+	<tr>
+		<td>
+			<input type="checkbox" id="multilanguage" onClick="update()">multilanguage
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="remotedata" onClick="update()">remotedata
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="remotereplacedata" onClick="update()">remotereplacedata
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="remotecomment" onClick="update()">remotecomment
+		</td>
+	</tr>
 	<tr>
 		<td>
 			<H3>Source Setting</H3>
@@ -721,14 +768,6 @@
 	</tr>
 	<tr>
 		<td>
-			<strong>css:</strong>
-		</td>
-		<td>
-			<textarea id="css" style="width: 100%;" onchange="update()"></textarea>
-		</td>
-	</tr>
-	<tr>
-		<td>
 			<strong>Target Line:(nn,nn-nn,or F)</strong>
 		</td>
 		<td>
@@ -745,30 +784,26 @@
 	</tr>
 	<tr>
 		<td>
+			<strong>replacespecifier:</strong>
+		</td>
+		<td>
+			<textarea id="replacespecifier" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<strong>replacewords:</strong>
+		</td>
+		<td>
+			<textarea id="replacewords" style="width: 100%;" onchange="update()"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<strong>Demiliter:</strong>
 		</td>
 		<td>
-			<textarea id="ml_splitword" style="width: 100%;" onchange="update()"></textarea>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="checkbox" id="multilanguage" onClick="update()">multilanguage
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="checkbox" id="remotedata" onClick="update()">remotedata
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="checkbox" id="remotereplacedata" onClick="update()">remotereplacedata
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="checkbox" id="remotecomment" onClick="update()">remotecomment
+			<textarea id="splitword" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
 </table>
