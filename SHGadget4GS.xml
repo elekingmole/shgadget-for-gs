@@ -25,15 +25,8 @@
 	<UserPref name="replacespecifier" datatype="string" default_value="%--%" />
 	<UserPref name="replacewords" datatype="string" />
 	<UserPref name="blnSetting" datatype="string" />
-	<UserPref name="remotedata" datatype="bool" default_value="false" />
-	<UserPref name="urlshow" datatype="bool" default_value="false" />
-	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
-	<UserPref name="collapse" datatype="bool" default_value="false" />
-	<UserPref name="gutter" datatype="bool" default_value="false" />
-	<UserPref name="multilanguage" datatype="bool" default_value="false" />
-	<UserPref name="remotereplacedata" datatype="bool" default_value="false" />
-	<UserPref name="remotecomment" datatype="bool" default_value="false" />
-	
+	<UserPref name="blnSettingValues" datatype="string" default_value="multilanguage///M,remotedata///D,remotereplacedata///R,remotecomment///C,urlshow///U,dynamicheight///H,gutter///G,collapse///P,simplereplace///S"/>
+//Sでシンプルリプレイスを
 <Content type="html"><![CDATA[
 
 <link type="text/css" href="__UP_baseurlcss__/shCore.css" rel="stylesheet"/>
@@ -47,21 +40,20 @@
 	var preprocessjsURL = "__UP_preprocessjsURL__";
 	var splitString = "__UP_splitword__";
 	var prefs=new gadgets.Prefs();
-    var lang= getLang();
+	var lang= getLang();
 	var targetlineArray = new Array();
 	var strArray;
 	var returnHtml="";
-	var boolml = getBln("multilanguage");
-	var boolhe = getBln("htmlescape");
 	var contentData="__UP_content__";
 	var replaceData="__UP_replacewords__";
 	var commentData="__UP_comment__";
 	var commentArray;
-	
+	var blnSetting = "__UP_blnSetting__"
+	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
 	
 	function getTargetLangData(sourceData,returnMessage){
 		if(to(sourceData)){
-			if(boolml && sourceData.indexOf(splitString) != -1){
+			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
 				sourceData = getTargetData(sourceData);
 			}
 		}else{
@@ -88,7 +80,7 @@
 	}
 	
 	function doHighlight(){
-		if(getBln("remotedata") && getBln("urlshow")){
+		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
@@ -97,29 +89,26 @@
 	}
 	
 	function setupData(){
-		//window.alert("1");
 		contentData = getTargetLangData(contentData,"Content not specified.");
-		doFork("remotedata",contentData,getContentData,setupReplaceData);
+		doFork("D",contentData,getContentData,setupReplaceData);
 	}
 
 	function getContentData(obj){
 		contentData = obj.text;	
-		if(boolml && contentData.indexOf(splitString) != -1){
+		if(getBlnEx("M") && contentData.indexOf(splitString) != -1){
 			contentData = getTargetData(contentData);
 		}
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
-		//window.alert("2");
 		replaceData = getTargetLangData(replaceData,"");
-		doFork("remotereplacedata",replaceData,getReplaceData,setupCommentData);
+		doFork("R",replaceData,getReplaceData,setupCommentData);
 	}
 
 	function getReplaceData(obj){
 		replaceData = obj.text;	
-		
-		if(boolml && replaceData.indexOf(splitString) != -1){
+		if(getBlnEx("M") && replaceData.indexOf(splitString) != -1){
 			replaceData = getTargetData(replaceData);
 		}
 		setupCommentData();
@@ -127,25 +116,23 @@
 
 	function setupCommentData(){
 		commentData = getTargetLangData(commentData,"");
-		window.alert(replaceData);
-		doFork("remotecomment",commentData,getCommentData,doProcessData);
+		doFork("C",commentData,getCommentData,doProcessData);
 	}
 
 	function getCommentData(obj){
 		commentData = obj.text;	
 		
-		if(boolml && commentData.indexOf(splitString) != -1){
+		if(getBlnEx("M") && commentData.indexOf(splitString) != -1){
 			commentData = getTargetData(commentData);
 		}
 		doProcessData();
 	}
 
 	function doProcessData(){
-		//window.alert("4");
 		returnHtml += changeData();
 		closeHTML();
 	}
-
+//ここでコメントデータ処理を
 	function changeData(){
 		if(to(contentData)){
 			if(to(preprocessjsURL)){
@@ -173,7 +160,7 @@
 		
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
-			
+			//window.alert("tempWords[0]: " + tempWords[0] + "tempWords[1]: " + tempWords[1] );
 			if(tempWords[0].length>0){
 				if(tempWords[0].indexOf(specifier) != -1){
 					replaceWords = tempWords[0].split(specifier);
@@ -199,8 +186,14 @@
 					if(replaceWords[i].indexOf("=") != -1){
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
-						regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
-						//window.alert("regexp"+regexp);
+						
+						if(getBlnEx("S")){
+							regexp= new RegExp(tempTargetWord[0],"g");
+						}else{
+							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
+						}
+												
+						//window.alert("regexp"+regexp + " tempReplaceWord: "+ tempReplaceWord);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -218,11 +211,11 @@
 		var returnContent = targetComment;
 		var diff=0;
 		        
-		if(boolml && targetComment.indexOf(splitString) != -1){
+		if(getBlnEx("M") && targetComment.indexOf(splitString) != -1){
 			targetComment = getTargetData(targetComment);
 		}
 		
-		if(getBln("remotecomment") && targetComment.substring(0,4)=="http" ){
+		if(getBlnEx("C") && targetComment.substring(0,4)=="http" ){
 			getRemoteComment(targetComment.substring(0,targetComment.length));
 			return;
 		}else{
@@ -278,9 +271,9 @@
 
 
 
-	function doFork(targetBln,targeData,async,defaultMethod){
+	function doFork(targetBlnWord,targeData,async,defaultMethod){
 		
-		if(getBln(targetBln)){
+		if(getBlnEx(targetBlnWord)){
 			if(targeData.substring(0,4)=="http"){
 				getRemoteData(targeData.substring(0,targeData.length),async);
 				return;
@@ -288,6 +281,9 @@
 				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
+			window.alert("URL not specified.");
+			defaultMethod();
+			return;
 		}else{
 			defaultMethod();
 			return;
@@ -332,7 +328,7 @@
 		var commentbase;
 		var diff=0;
 		
-		if(boolml && remoteContentData.indexOf(splitString) != -1){
+		if(getBlnEx("M") && remoteContentData.indexOf(splitString) != -1){
 			commentbase=getTargetData(remoteContentData);
 		}else{
         	commentbase=remoteContentData;
@@ -368,7 +364,7 @@
 		SyntaxHighlighter.autoloader('__UP_languagelower__                   __UP_baseurljs__/shBrush__UP_language__.js');
 		SyntaxHighlighter.all();
 		
-		if(getBln("dynamicheight")){
+		if(getBlnEx("H")){
 			gadgets.window.adjustHeight();
 		}
 	}
@@ -489,6 +485,13 @@
 		}
 	}
 
+	function getBlnEx(prefsnameword){
+		if(blnSettingValues.indexOf(prefsnameword) != -1){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	function matchNumber(targetString){
 		if(targetString.match(/^[0-9]+/)){
@@ -566,7 +569,7 @@
 		}
 		return returnData;
 	}
-
+	
 	gadgets.util.registerOnLoadHandler(doHighlight);
 </script>
 <div id="content_div"></div>
@@ -578,12 +581,14 @@
 <script type="text/javascript">
 	var prefs=new gadgets.Prefs();
 	var blnSetting = "__UP_blnSetting__"
+	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
+
 	function init() {
 	
 		initStringValue(new Array('baseurljs','baseurlcss','content','targetline','baseline','comment',
 		'firstline','highlight','tabsize','shtitle','language','theme','replacespecifier','replacewords','preprocessjsURL','splitword'));
 	
-		initBoolValueEx(new Array("multilanguage///M","remotedata///D","remotereplacedata///R","remotecomment///C","urlshow///U","dynamicheight///H","gutter///G","collapse///P"));
+		initBoolValueEx(blnSettingValues.split(","));
 	
 		update();
 	}
@@ -601,9 +606,10 @@
 	
 	function initBoolValueEx(blns){
 		var tempString;
+		//window.alert("blnSetting: "+blnSetting+" blns.length" + blns.length);
 		for (i=0;i<blns.length;i++){
+			//blns[i]=blns[i].replace(/&#34;/g,'');
 			tempString = blns[i].split("///");
-			setElementValue(tempString[0],tempString[1],blnSetting);
 			
 			if(blnSetting.indexOf(tempString[1]) != -1){
 				document.getElementById(tempString[0]).checked=true;
@@ -612,11 +618,6 @@
 			}
 		}
 	}
-
-	function setElementValue(name,word,settings){
-		
-	}
-
 
 	function initStringValue(strs){
 		for (i=0;i<strs.length;i++){
@@ -650,9 +651,8 @@
 		for (i=0;i<blns.length;i++){
 			tempString = blns[i].split("///");
 			
-			
 			if(document.getElementById(tempString[0]).checked==true){
-				tempSetting += tempSetting[1];
+				tempSetting += tempString[1];
 			}
 		}
 		prefs.set('blnSetting',tempSetting);
@@ -663,11 +663,8 @@
 	function update() {
 		updatePrefs(new Array('language','theme','baseurljs','baseurlcss','content','baseline','comment',
 						'targetline','firstline','highlight','tabsize','shtitle','replacespecifier','replacewords','preprocessjsURL','splitword'));
-
-
-
 		
-		updatePrefsBlnEx(new Array("multilanguage///M","remotedata///D","remotereplacedata///R","remotecomment///C","urlshow///U","dynamicheight///H","gutter///G","collapse///P"));
+		updatePrefsBlnEx(blnSettingValues.split(","));
 
 		var shOption ="";
 	
@@ -717,6 +714,11 @@
 	<tr>
 		<td>
 			<input type="checkbox" id="remotecomment" onClick="update()">remotecomment
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="simplereplace" onClick="update()">simplereplace
 		</td>
 	</tr>
 	<tr>
