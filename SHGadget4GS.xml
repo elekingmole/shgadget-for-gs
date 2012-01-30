@@ -26,7 +26,6 @@
 	<UserPref name="replacewords" datatype="string" />
 	<UserPref name="blnSetting" datatype="string" />
 	<UserPref name="blnSettingValues" datatype="string" default_value="multilanguage///M,remotedata///D,remotereplacedata///R,remotecomment///C,urlshow///U,dynamicheight///H,gutter///G,collapse///P,simplereplace///S"/>
-//Sでシンプルリプレイスを
 <Content type="html"><![CDATA[
 
 <link type="text/css" href="__UP_baseurlcss__/shCore.css" rel="stylesheet"/>
@@ -42,7 +41,7 @@
 	var prefs=new gadgets.Prefs();
 	var lang= getLang();
 	var targetlineArray = new Array();
-	var strArray;
+	var strArray = new Array();
 	var returnHtml="";
 	var contentData="__UP_content__";
 	var replaceData="__UP_replacewords__";
@@ -50,35 +49,7 @@
 	var commentArray;
 	var blnSetting = "__UP_blnSetting__"
 	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
-	
-	function getTargetLangData(sourceData,returnMessage){
-		if(to(sourceData)){
-			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
-				sourceData = getTargetData(sourceData);
-			}
-		}else{
-			sourceData = returnMessage;
-		}
 		
-		return sourceData;
-	}
-	
-	function getTargetData(targetData){
-		var tempContent = targetData.split(splitString);
-		var returnContent = tempContent[0].substring(3,tempContent[0].length);
-		var diff = 0;
-		
-		for(i=0;i<tempContent.length;i++){
-			for(var diff=0;diff<3;diff++){
-				if(tempContent[i].substring(0+diff,2+diff) == lang ){
-					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
-					break;
-				}
-			}	
-		}
-		return returnContent;
-	}
-	
 	function doHighlight(){
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
@@ -132,9 +103,10 @@
 		returnHtml += changeData();
 		closeHTML();
 	}
-//ここでコメントデータ処理を
+
 	function changeData(){
 		if(to(contentData)){
+			
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
 			}
@@ -143,7 +115,15 @@
 				contentData = doReplaceWords();
 			}
 			
-			return contentData;
+			strArray = getStrArray();
+			targetlineArray = getTargetLineArray();
+			
+			if(to(commentData)){
+				commentArray = getCommentArray();
+			}else{
+				commentArray = new Array();
+			}
+			return processTargetlineData(targetlineArray,strArray,commentArray);
 		}
 	}
 
@@ -156,11 +136,9 @@
 		var prefix=specifier.substring(0,specifier.length/2);
 		var suffix=specifier.substring(specifier.length/2,specifier.length);;
 		var regexp;
-			
 		
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
-			//window.alert("tempWords[0]: " + tempWords[0] + "tempWords[1]: " + tempWords[1] );
 			if(tempWords[0].length>0){
 				if(tempWords[0].indexOf(specifier) != -1){
 					replaceWords = tempWords[0].split(specifier);
@@ -193,7 +171,6 @@
 							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
 						}
 												
-						//window.alert("regexp"+regexp + " tempReplaceWord: "+ tempReplaceWord);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -203,73 +180,91 @@
 		return contentData;
 	}
 
-
-	function getCommentData3(targetComment){
+	function getCommentArray(){
 		commentArray = new Array();
 		var tempArray = new Array();
 		var tempContent;
-		var returnContent = targetComment;
 		var diff=0;
-		        
-		if(getBlnEx("M") && targetComment.indexOf(splitString) != -1){
-			targetComment = getTargetData(targetComment);
-		}
 		
-		if(getBlnEx("C") && targetComment.substring(0,4)=="http" ){
-			getRemoteComment(targetComment.substring(0,targetComment.length));
-			return;
-		}else{
-			if(targetComment.indexOf("-") != -1){
-				if(targetComment.indexOf(",") != -1){
-					tempArray = targetComment.split(",");
-				}else{
-					tempArray.push(targetComment);
-				}
+		if(commentData.indexOf("-") != -1){
+			if(commentData.indexOf(",") != -1){
+				tempArray = commentData.split(",");
+			}else{
+				tempArray.push(commentData);
+			}
 	
-				for(c=0;c<tempArray.length;c++){
-					if(tempArray[c].length > 0 ){
+			for(c=0;c<tempArray.length;c++){
+				if(tempArray[c].length > 0 ){
 						commentArray.push(parseComment(tempArray[c]));
 					}
 				}
 			}
 			return commentArray;
-		}
 	}
-	
 
-	function getCodeData2(obj) {
-		var str = gadgets.util.escapeString(obj.text);
-		var commentbase = "__UP_comment__";
-		var commentArray;
-		var targetlineString = "__UP_targetline__";
+	function parseComment(parseTargetComment){
+		var tempArray;
+		var tempCommentArray = new Array();
 		
-		if(to(preprocessjsURL)){
-			str = doModify(str);
+		if(parseTargetComment.indexOf("-") == -1){
+			tempCommentArray.push(new Array(parseTargetComment.substring(1),parseTargetComment.substring(0,1)));
+		}else{
+			tempArray = parseTargetComment.split("-");
+			tempCommentArray.push(new Array(tempArray[0].substring(1),tempArray[0].substring(0,1) + tempArray[1]));
 		}
+		return tempCommentArray;
+	}
+
+	function getStrArray(){
+		var str = gadgets.util.escapeString(contentData);
 		
 		if(str.indexOf("&#13;&#10;") != -1){
 			strArray = str.split("&#13;&#10;");
 		}else{
 			strArray = str.split("&#10;");
 		}
-				
+		
+		return strArray;
+	}
+
+	function getTargetLineArray(){
+		var targetlineString = "__UP_targetline__";
+
 		if(to(targetlineString)){
 			targetlineArray = getTargetline(targetlineString,strArray);
 		}else{
 			targetlineArray = getTargetline("0-",strArray);
 		}
-		
-		if(to(commentbase)){
-			commentArray = getCommentData(commentbase);
-		}else{
-			commentArray = new Array();
-		}	
-		
-		returnHtml+=processTargetlineData(targetlineArray,strArray,commentArray);
-		closeHTML();
+		return targetlineArray;
 	}
-
-
+	
+	function getTargetLangData(sourceData,returnMessage){
+		if(to(sourceData)){
+			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
+				sourceData = getTargetData(sourceData);
+			}
+		}else{
+			sourceData = returnMessage;
+		}
+		
+		return sourceData;
+	}
+	
+	function getTargetData(targetData){
+		var tempContent = targetData.split(splitString);
+		var returnContent = tempContent[0].substring(3,tempContent[0].length);
+		var diff = 0;
+		
+		for(i=0;i<tempContent.length;i++){
+			for(var diff=0;diff<3;diff++){
+				if(tempContent[i].substring(0+diff,2+diff) == lang ){
+					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
+					break;
+				}
+			}
+		}
+		return returnContent;
+	}
 
 	function doFork(targetBlnWord,targeData,async,defaultMethod){
 		
@@ -298,65 +293,9 @@
 	}
 
 
-	function getTargetData(targetData){
-		var tempContent = targetData.split(splitString);
-		var returnContent = tempContent[0].substring(3,tempContent[0].length);
-		var diff = 0;
-		
-		for(i=0;i<tempContent.length;i++){
-			for(var diff=0;diff<3;diff++){
-				if(tempContent[i].substring(0+diff,2+diff) == lang ){
-					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
-					break;
-				}
-			}	
-		}
-		return returnContent;
-	}
+	
 
 	
-	function getRemoteComment(contentURL) {
-		var params = {};
-		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
-		var url= contentURL;
-		gadgets.io.makeRequest(url, commentresponse, params);
-	}
-
-	function commentresponse(obj){
-		var remoteContentData = obj.text;	
-		var tempRemoteContent;
-		var commentbase;
-		var diff=0;
-		
-		if(getBlnEx("M") && remoteContentData.indexOf(splitString) != -1){
-			commentbase=getTargetData(remoteContentData);
-		}else{
-        	commentbase=remoteContentData;
-		}
-		
-		if(to(commentbase)){
-			commentArray = getCommentData(commentbase);
-		}else{
-			commentArray = new Array();
-		}
-		
-		returnHtml+=processTargetlineData(targetlineArray,strArray,commentArray);
-		closeHTML();
-	}
-
-
-	function parseComment(parseTargetComment){
-		var tempArray;
-		var tempCommentArray = new Array();
-		
-		if(parseTargetComment.indexOf("-") == -1){
-			tempCommentArray.push(new Array(parseTargetComment.substring(1),parseTargetComment.substring(0,1)));
-		}else{
-			tempArray = parseTargetComment.split("-");
-			tempCommentArray.push(new Array(tempArray[0].substring(1),tempArray[0].substring(0,1) + tempArray[1]));
-		}
-		return tempCommentArray;
-	}
 
 	function closeHTML(){
 		returnHtml+="</pre>";
