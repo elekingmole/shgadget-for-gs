@@ -26,6 +26,7 @@
 	<UserPref name="replacewords" datatype="string" />
 	<UserPref name="blnSetting" datatype="string" />
 	<UserPref name="blnSettingValues" datatype="string" default_value="multilanguage///M,remotedata///D,remotereplacedata///R,remotecomment///C,urlshow///U,dynamicheight///H,gutter///G,collapse///P,simplereplace///S"/>
+
 <Content type="html"><![CDATA[
 
 <link type="text/css" href="__UP_baseurlcss__/shCore.css" rel="stylesheet"/>
@@ -49,8 +50,9 @@
 	var commentArray;
 	var blnSetting = "__UP_blnSetting__"
 	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
-		
+	
 	function doHighlight(){
+	window.alert(getBlnEx("U"));
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
@@ -106,7 +108,6 @@
 
 	function changeData(){
 		if(to(contentData)){
-			
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
 			}
@@ -123,8 +124,37 @@
 			}else{
 				commentArray = new Array();
 			}
+			
 			return processTargetlineData(targetlineArray,strArray,commentArray);
 		}
+	}
+
+	function getTargetLangData(sourceData,returnMessage){
+		if(to(sourceData)){
+			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
+				sourceData = getTargetData(sourceData);
+			}
+		}else{
+			sourceData = returnMessage;
+		}
+		
+		return sourceData;
+	}
+	
+	function getTargetData(targetData){
+		var tempContent = targetData.split(splitString);
+		var returnContent = tempContent[0].substring(3,tempContent[0].length);
+		var diff = 0;
+		
+		for(i=0;i<tempContent.length;i++){
+			for(var diff=0;diff<3;diff++){
+				if(tempContent[i].substring(0+diff,2+diff) == lang ){
+					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
+					break;
+				}
+			}	
+		}
+		return returnContent;
 	}
 
 	function doReplaceWords(){
@@ -134,11 +164,13 @@
 		var tempTargetWord;
 		var tempReplaceWord;
 		var prefix=specifier.substring(0,specifier.length/2);
-		var suffix=specifier.substring(specifier.length/2,specifier.length);;
+		var suffix=specifier.substring(specifier.length/2,specifier.length);
 		var regexp;
+			
 		
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
+			//window.alert("tempWords[0]: " + tempWords[0] + "tempWords[1]: " + tempWords[1] );
 			if(tempWords[0].length>0){
 				if(tempWords[0].indexOf(specifier) != -1){
 					replaceWords = tempWords[0].split(specifier);
@@ -171,6 +203,7 @@
 							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
 						}
 												
+						//window.alert("regexp"+regexp + " tempReplaceWord: "+ tempReplaceWord);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -195,11 +228,11 @@
 	
 			for(c=0;c<tempArray.length;c++){
 				if(tempArray[c].length > 0 ){
-						commentArray.push(parseComment(tempArray[c]));
-					}
+					commentArray.push(parseComment(tempArray[c]));
 				}
 			}
-			return commentArray;
+		}
+		return commentArray;
 	}
 
 	function parseComment(parseTargetComment){
@@ -237,34 +270,6 @@
 		}
 		return targetlineArray;
 	}
-	
-	function getTargetLangData(sourceData,returnMessage){
-		if(to(sourceData)){
-			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
-				sourceData = getTargetData(sourceData);
-			}
-		}else{
-			sourceData = returnMessage;
-		}
-		
-		return sourceData;
-	}
-	
-	function getTargetData(targetData){
-		var tempContent = targetData.split(splitString);
-		var returnContent = tempContent[0].substring(3,tempContent[0].length);
-		var diff = 0;
-		
-		for(i=0;i<tempContent.length;i++){
-			for(var diff=0;diff<3;diff++){
-				if(tempContent[i].substring(0+diff,2+diff) == lang ){
-					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
-					break;
-				}
-			}
-		}
-		return returnContent;
-	}
 
 	function doFork(targetBlnWord,targeData,async,defaultMethod){
 		
@@ -291,11 +296,6 @@
 		var url= contentURL;
 		gadgets.io.makeRequest(url, handler, params);
 	}
-
-
-	
-
-	
 
 	function closeHTML(){
 		returnHtml+="</pre>";
@@ -425,7 +425,7 @@
 	}
 
 	function getBlnEx(prefsnameword){
-		if(blnSettingValues.indexOf(prefsnameword) != -1){
+		if(blnSetting.indexOf(prefsnameword) != -1){
 			return true;
 		}else{
 			return false;
@@ -532,20 +532,9 @@
 		update();
 	}
 
-	function initBoolValue(blns){
-		for (i=0;i<blns.length;i++){
-			var targetboolean=prefs.getBool(blns[i]);
-			if(targetboolean ==true){
-				document.getElementById(blns[i]).checked=true;
-			}else{
-				document.getElementById(blns[i]).checked=false;
-			}
-		}
-	}
-	
 	function initBoolValueEx(blns){
 		var tempString;
-		//window.alert("blnSetting: "+blnSetting+" blns.length" + blns.length);
+		window.alert("blnSetting: "+blnSetting+" blns.length" + blns.length);
 		for (i=0;i<blns.length;i++){
 			//blns[i]=blns[i].replace(/&#34;/g,'');
 			tempString = blns[i].split("///");
@@ -572,17 +561,6 @@
 			prefs.set(strs[i],document.getElementById(strs[i]).value);
 		}
 	}
-
-	function updatePrefsBln(blns){
-		for (i=0;i<blns.length;i++){
-			if(document.getElementById(blns[i]).checked==true){
-				prefs.set(blns[i],true);
-			}else{
-				prefs.set(blns[i],false);
-			}
-		}
-	}
-
 
 	function updatePrefsBlnEx(blns){
 		var tempString;
