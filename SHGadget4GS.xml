@@ -39,20 +39,22 @@
 <script type="text/javascript">
 	var preprocessjsURL = "__UP_preprocessjsURL__";
 	var splitString = "__UP_splitword__";
-	var prefs=new gadgets.Prefs();
-	var lang= getLang();
-	var targetlineArray = new Array();
-	var strArray = new Array();
-	var returnHtml="";
 	var contentData="__UP_content__";
 	var replaceData="__UP_replacewords__";
 	var commentData="__UP_comment__";
-	var commentArray;
 	var blnSetting = "__UP_blnSetting__"
-	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
 	
+	var returnHtml="";
+	
+	var targetlineArray = new Array();
+	var strArray = new Array();
+	var commentArray = new Array();
+	
+	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
+	var prefs=new gadgets.Prefs();
+	var lang= getLang();
+		
 	function doHighlight(){
-	window.alert(getBlnEx("U"));
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
@@ -121,8 +123,6 @@
 			
 			if(to(commentData)){
 				commentArray = getCommentArray();
-			}else{
-				commentArray = new Array();
 			}
 			
 			return processTargetlineData(targetlineArray,strArray,commentArray);
@@ -139,6 +139,9 @@
 		}
 		
 		return sourceData;
+	}
+	
+	function test()[
 	}
 	
 	function getTargetData(targetData){
