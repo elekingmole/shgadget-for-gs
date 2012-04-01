@@ -37,39 +37,42 @@
 <script src="__UP_preprocessjsURL__" type="text/javascript"></script>
 
 <script type="text/javascript">
+	var prefs=new gadgets.Prefs();
 	var preprocessjsURL = "__UP_preprocessjsURL__";
 	var splitString = "__UP_splitword__";
 	var contentData="__UP_content__";
 	var replaceData="__UP_replacewords__";
 	var commentData="__UP_comment__";
 	var blnSetting = "__UP_blnSetting__"
-	
+
 	var returnHtml="";
-	
+
 	var targetlineArray = new Array();
 	var strArray = new Array();
 	var commentArray = new Array();
-	
-	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
-	var prefs=new gadgets.Prefs();
+
+	var blnSettingValues;
+
 	var lang= getLang();
-		
+
 	function doHighlight(){
+		blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
+		windows.alert("1");
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
-		
+		windows.alert(returnHtml);
 		setupData();
 	}
-	
+
 	function setupData(){
 		contentData = getTargetLangData(contentData,"Content not specified.");
 		doFork("D",contentData,getContentData,setupReplaceData);
 	}
 
 	function getContentData(obj){
-		contentData = obj.text;	
+		contentData = obj.text;
 		if(getBlnEx("M") && contentData.indexOf(splitString) != -1){
 			contentData = getTargetData(contentData);
 		}
@@ -82,7 +85,7 @@
 	}
 
 	function getReplaceData(obj){
-		replaceData = obj.text;	
+		replaceData = obj.text;
 		if(getBlnEx("M") && replaceData.indexOf(splitString) != -1){
 			replaceData = getTargetData(replaceData);
 		}
@@ -95,8 +98,8 @@
 	}
 
 	function getCommentData(obj){
-		commentData = obj.text;	
-		
+		commentData = obj.text;
+
 		if(getBlnEx("M") && commentData.indexOf(splitString) != -1){
 			commentData = getTargetData(commentData);
 		}
@@ -113,18 +116,18 @@
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
 			}
-			
+
 			if(to(replaceData)){
 				contentData = doReplaceWords();
 			}
-			
+
 			strArray = getStrArray();
 			targetlineArray = getTargetLineArray();
-			
+
 			if(to(commentData)){
 				commentArray = getCommentArray();
 			}
-			
+
 			return processTargetlineData(targetlineArray,strArray,commentArray);
 		}
 	}
@@ -137,25 +140,25 @@
 		}else{
 			sourceData = returnMessage;
 		}
-		
+
 		return sourceData;
 	}
-	
+
 	function test()[
 	}
-	
+
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
 		var returnContent = tempContent[0].substring(3,tempContent[0].length);
 		var diff = 0;
-		
+
 		for(i=0;i<tempContent.length;i++){
 			for(var diff=0;diff<3;diff++){
 				if(tempContent[i].substring(0+diff,2+diff) == lang ){
 					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
 					break;
 				}
-			}	
+			}
 		}
 		return returnContent;
 	}
@@ -169,8 +172,8 @@
 		var prefix=specifier.substring(0,specifier.length/2);
 		var suffix=specifier.substring(specifier.length/2,specifier.length);
 		var regexp;
-			
-		
+
+
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
 			//window.alert("tempWords[0]: " + tempWords[0] + "tempWords[1]: " + tempWords[1] );
@@ -180,39 +183,39 @@
 				}else{
 					replaceWords = tempWords[0];
 				}
-				
+
 				for(i=0;i<replaceWords.length;i++){
 					regexp= new RegExp(prefix+i+suffix,"g");
 					contentData=contentData.replace(regexp,replaceWords[i]);
 				}
 			}
-			
+
 			if(tempWords[1].length>0){
 				if(tempWords[1].indexOf(specifier) != -1){
 					replaceWords = tempWords[1].split(specifier);
 				}else{
 					replaceWords = tempWords[1];
 				}
-			
+
 				for(i=0;i<replaceWords.length;i++){
-					
+
 					if(replaceWords[i].indexOf("=") != -1){
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
-						
+
 						if(getBlnEx("S")){
 							regexp= new RegExp(tempTargetWord[0],"g");
 						}else{
 							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
 						}
-												
+
 						//window.alert("regexp"+regexp + " tempReplaceWord: "+ tempReplaceWord);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
-			} 
+			}
 		}
-		
+
 		return contentData;
 	}
 
@@ -221,14 +224,14 @@
 		var tempArray = new Array();
 		var tempContent;
 		var diff=0;
-		
+
 		if(commentData.indexOf("-") != -1){
 			if(commentData.indexOf(",") != -1){
 				tempArray = commentData.split(",");
 			}else{
 				tempArray.push(commentData);
 			}
-	
+
 			for(c=0;c<tempArray.length;c++){
 				if(tempArray[c].length > 0 ){
 					commentArray.push(parseComment(tempArray[c]));
@@ -241,7 +244,7 @@
 	function parseComment(parseTargetComment){
 		var tempArray;
 		var tempCommentArray = new Array();
-		
+
 		if(parseTargetComment.indexOf("-") == -1){
 			tempCommentArray.push(new Array(parseTargetComment.substring(1),parseTargetComment.substring(0,1)));
 		}else{
@@ -253,13 +256,13 @@
 
 	function getStrArray(){
 		var str = gadgets.util.escapeString(contentData);
-		
+
 		if(str.indexOf("&#13;&#10;") != -1){
 			strArray = str.split("&#13;&#10;");
 		}else{
 			strArray = str.split("&#10;");
 		}
-		
+
 		return strArray;
 	}
 
@@ -275,7 +278,7 @@
 	}
 
 	function doFork(targetBlnWord,targeData,async,defaultMethod){
-		
+		windows.alert(targetBlnWord);
 		if(getBlnEx(targetBlnWord)){
 			if(targeData.substring(0,4)=="http"){
 				getRemoteData(targeData.substring(0,targeData.length),async);
@@ -305,12 +308,12 @@
 		document.getElementById('content_div').innerHTML += returnHtml;
 		SyntaxHighlighter.autoloader('__UP_languagelower__                   __UP_baseurljs__/shBrush__UP_language__.js');
 		SyntaxHighlighter.all();
-		
+
 		if(getBlnEx("H")){
 			gadgets.window.adjustHeight();
 		}
 	}
-	
+
 	function htmlUnescape(str){
 		str=str.replace(/&gt;/g,'>');
 		str=str.replace(/&lt;/g,'<');
@@ -319,27 +322,27 @@
 		str=str.replace(/&#34;/g,'"');
 		str=str.replace(/&quot;/g,'"');
 		str=str.replace(/&#39;/g,"'");
-		
+
 		return str;
 	}
-	
+
 	function getTargetline(tempTargetlineString,tempStrArray){
 		var tempTargetlineArray = new Array();
 		var returnTargetlineArray = new Array();
 		var lineMax = tempStrArray.length;
-		
+
 		if((tempTargetlineString.indexOf(",") != -1 )){
 			tempTargetlineArray = tempTargetlineString.split(",");
 		}else{
 			if(tempTargetlineString.indexOf("F") != -1){
 				var index;
-					
+
 				if(tempTargetlineString.length == 1){
 					index= 0;
 				}else{
 					index = parseInt(tempTargetlineString.substring(1,tempTargetlineString.length));
 				}
-				
+
 				if(tempStrArray[index].indexOf("L-I-N-E")!=-1){
 					var targetlinefromSource = tempStrArray[index].split("L-I-N-E");
 					if(targetlinefromSource[1].length>0){
@@ -352,15 +355,15 @@
 				tempTargetlineArray.push(tempTargetlineString);
 			}
 		}
-		
+
 		var tempUnfoldedArray;
 		for(t= 0;t<= tempTargetlineArray.length;t++){
 			tempUnfoldedArray = new Array();
 			if(to(tempTargetlineArray[t])){
-				
+
 				if(tempTargetlineArray[t].indexOf("-") != -1 ){
 					var tempNumber = tempTargetlineArray[t].split("-");
-				
+
 					if(tempNumber[0].length>0 && tempNumber[1].length>0){
 						if(matchNumber(tempNumber[0]) && matchNumber(tempNumber[1])){
 							tempUnfoldedArray=unfoldTargetline(parseInt(tempNumber[0]),parseInt(tempNumber[1]));
@@ -377,12 +380,12 @@
 				}else{
 					tempUnfoldedArray.push(tempTargetlineArray[t]);
 				}
-				
+
 				for(x= 0;x<= tempUnfoldedArray.length;x++){
 					if(to(tempUnfoldedArray[x])){
 						if(tempUnfoldedArray[x].indexOf(",") != -1){
 							var tempSplitArray = tempUnfoldedArray[x].split(",");
-					
+
 							for(w= 0;w<= tempSplitArray.length;w++){
 								if(to(tempSplitArray[w])){
 									returnTargetlineArray.push(tempSplitArray[w]);
@@ -391,7 +394,7 @@
 						}else{
 							returnTargetlineArray.push(tempUnfoldedArray[x]);
 						}
-					}		
+					}
 				}
 			}
 		}
@@ -403,7 +406,7 @@
 		var comma=",";
 		for (u= startline ;u<= endline;u++){
 			unfoldedTargetline += u + comma;
-			
+
 			if(endline == u +1){
 				comma ="";
 			}
@@ -418,7 +421,7 @@
 			return false;
 		}
 	}
-	
+
 	function getBln(prefsname){
 		if(prefs.getBool(prefsname) == true){
 			return true;
@@ -463,7 +466,7 @@
 								if(tempCommentArray[1].substring(0,1) == "S"){
 									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
 									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
-									
+
 									if(index+1 < commentArray.length){
 										tempCommentArray = commentArray[index+1][0];
 										if(tempCommentArray[0].match(/^[0-9]+/) && parseInt(tempCommentArray[0]) == i){
@@ -476,7 +479,7 @@
 											}
 										}
 									}
-									
+
 									returnData+="\r\n";
 								}else if(tempCommentArray[1].substring(0,1) == "A"){
 									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine] +
@@ -486,20 +489,20 @@
 								}else{
 									returnData+= "\r\n";
 								}
-				
-								index +=1;	
-											
+
+								index +=1;
+
 							}else{
 								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
 							}
 						}else{
-							returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";	
+							returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
 						}
 					}else{
-						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";					
+						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
 					}
 				}
-					
+
 			}else if(targetlineArray[i].substring(0,1) =="S" && targetlineArray[i].length>1){
 				returnData+= targetlineArray[i].substring(1,targetlineArray[i].length) + "\r\n";
 			}else if(targetlineArray[i].substring(0,1) =="A" && targetlineArray[i].length>1){
@@ -511,7 +514,7 @@
 		}
 		return returnData;
 	}
-	
+
 	gadgets.util.registerOnLoadHandler(doHighlight);
 </script>
 <div id="content_div"></div>
@@ -526,12 +529,12 @@
 	var blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
 
 	function init() {
-	
+
 		initStringValue(new Array('baseurljs','baseurlcss','content','targetline','baseline','comment',
 		'firstline','highlight','tabsize','shtitle','language','theme','replacespecifier','replacewords','preprocessjsURL','splitword'));
-	
+
 		initBoolValueEx(blnSettingValues.split(","));
-	
+
 		update();
 	}
 
@@ -541,7 +544,7 @@
 		for (i=0;i<blns.length;i++){
 			//blns[i]=blns[i].replace(/&#34;/g,'');
 			tempString = blns[i].split("///");
-			
+
 			if(blnSetting.indexOf(tempString[1]) != -1){
 				document.getElementById(tempString[0]).checked=true;
 			}else{
@@ -570,36 +573,36 @@
 		var tempSetting="";
 		for (i=0;i<blns.length;i++){
 			tempString = blns[i].split("///");
-			
+
 			if(document.getElementById(tempString[0]).checked==true){
 				tempSetting += tempString[1];
 			}
 		}
 		prefs.set('blnSetting',tempSetting);
 	}
-	
-	
+
+
 
 	function update() {
 		updatePrefs(new Array('language','theme','baseurljs','baseurlcss','content','baseline','comment',
 						'targetline','firstline','highlight','tabsize','shtitle','replacespecifier','replacewords','preprocessjsURL','splitword'));
-		
+
 		updatePrefsBlnEx(blnSettingValues.split(","));
 
 		var shOption ="";
-	
+
 		if(document.getElementById('collapse').checked==true){
 			shOption +=  " collapse: true;";
 		}
-	
+
 		if(document.getElementById('gutter').checked==false){
 			shOption +=  " gutter: false;";
 		}
-	
+
 		if(prefs.getString('firstline').length>0){
 			shOption +=  " first-line: " + prefs.getString('firstline') + ";";
 		}
-	
+
 		if(prefs.getString('highlight').length>0){
 			shOption +=  " highlight:[" + prefs.getString('highlight') + "];";
 		}
@@ -607,12 +610,12 @@
 		if(prefs.getString('tabsize').length>0){
 			shOption +=  " tab-size: " + prefs.getString('tabsize') + ";";
 		}
-		
-		prefs.set('languagelower', document.getElementById('language').value.toLowerCase());	
+
+		prefs.set('languagelower', document.getElementById('language').value.toLowerCase());
 		prefs.set('shOption',shOption);
 	}
-	
-	
+
+
 </script>
 
 <table style="width: 100%;">
@@ -671,7 +674,7 @@
 		<td>
 			<textarea id="preprocessjsURL" style="width: 100%;" onchange="update()"></textarea>
 		</td>
-	</tr>	
+	</tr>
 	<tr>
 		<td>
 			<strong>BaseLine:(nn)</strong>
