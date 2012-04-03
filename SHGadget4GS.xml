@@ -49,20 +49,21 @@
 
 	var targetlineArray = new Array();
 	var strArray = new Array();
-	var commentArray = new Array();
+	var commentArray;
 
 	var blnSettingValues;
 
 	var lang= getLang();
 
 	function doHighlight(){
+		window.alert("1");
 		blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
-		windows.alert("1");
+
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
-		windows.alert(returnHtml);
+		window.alert(returnHtml);
 		setupData();
 	}
 
@@ -126,6 +127,8 @@
 
 			if(to(commentData)){
 				commentArray = getCommentArray();
+			}else{
+				commentArray = new Array();
 			}
 
 			return processTargetlineData(targetlineArray,strArray,commentArray);
@@ -144,8 +147,7 @@
 		return sourceData;
 	}
 
-	function test()[
-	}
+
 
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
@@ -278,7 +280,7 @@
 	}
 
 	function doFork(targetBlnWord,targeData,async,defaultMethod){
-		windows.alert(targetBlnWord);
+		window.alert(targetBlnWord);
 		if(getBlnEx(targetBlnWord)){
 			if(targeData.substring(0,4)=="http"){
 				getRemoteData(targeData.substring(0,targeData.length),async);
