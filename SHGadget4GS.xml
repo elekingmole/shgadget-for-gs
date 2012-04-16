@@ -56,14 +56,14 @@
 	var lang= getLang();
 
 	function doHighlight(){
-		window.alert("1");
+		//window.alert("1");
 		blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
 
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
-		window.alert(returnHtml);
+		//window.alert(returnHtml);
 		setupData();
 	}
 
@@ -280,7 +280,7 @@
 	}
 
 	function doFork(targetBlnWord,targeData,async,defaultMethod){
-		window.alert(targetBlnWord);
+		//window.alert(targetBlnWord);
 		if(getBlnEx(targetBlnWord)){
 			if(targeData.substring(0,4)=="http"){
 				getRemoteData(targeData.substring(0,targeData.length),async);
@@ -289,7 +289,7 @@
 				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
-			window.alert("URL not specified.");
+			//window.alert("URL not specified.");
 			defaultMethod();
 			return;
 		}else{
@@ -542,7 +542,7 @@
 
 	function initBoolValueEx(blns){
 		var tempString;
-		window.alert("blnSetting: "+blnSetting+" blns.length" + blns.length);
+		//window.alert("blnSetting: "+blnSetting+" blns.length" + blns.length);
 		for (i=0;i<blns.length;i++){
 			//blns[i]=blns[i].replace(/&#34;/g,'');
 			tempString = blns[i].split("///");
