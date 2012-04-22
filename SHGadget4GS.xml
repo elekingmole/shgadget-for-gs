@@ -56,14 +56,12 @@
 	var lang= getLang();
 
 	function doHighlight(){
-		//window.alert("1");
 		blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
 
 		if(getBlnEx("D") && getBlnEx("U")){
 			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
-		//window.alert(returnHtml);
 		setupData();
 	}
 
@@ -178,7 +176,6 @@
 
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
-			//window.alert("tempWords[0]: " + tempWords[0] + "tempWords[1]: " + tempWords[1] );
 			if(tempWords[0].length>0){
 				if(tempWords[0].indexOf(specifier) != -1){
 					replaceWords = tempWords[0].split(specifier);
@@ -211,7 +208,6 @@
 							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
 						}
 
-						//window.alert("regexp"+regexp + " tempReplaceWord: "+ tempReplaceWord);
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
@@ -280,7 +276,6 @@
 	}
 
 	function doFork(targetBlnWord,targeData,async,defaultMethod){
-		//window.alert(targetBlnWord);
 		if(getBlnEx(targetBlnWord)){
 			if(targeData.substring(0,4)=="http"){
 				getRemoteData(targeData.substring(0,targeData.length),async);
@@ -289,7 +284,6 @@
 				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
-			//window.alert("URL not specified.");
 			defaultMethod();
 			return;
 		}else{
