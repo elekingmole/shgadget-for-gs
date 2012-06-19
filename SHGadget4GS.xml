@@ -49,7 +49,7 @@
 
 	var targetlineArray = new Array();
 	var strArray = new Array();
-	var commentArray;
+	var commentArray = new Array();
 
 	var blnSettingValues;
 
@@ -81,6 +81,7 @@
 	function setupReplaceData(){
 		replaceData = getTargetLangData(replaceData,"");
 		doFork("R",replaceData,getReplaceData,setupCommentData);
+
 	}
 
 	function getReplaceData(obj){
@@ -111,6 +112,7 @@
 	}
 
 	function changeData(){
+
 		if(to(contentData)){
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
@@ -123,11 +125,12 @@
 			strArray = getStrArray();
 			targetlineArray = getTargetLineArray();
 
+
 			if(to(commentData)){
 				commentArray = getCommentArray();
-			}else{
-				commentArray = new Array();
 			}
+
+
 
 			return processTargetlineData(targetlineArray,strArray,commentArray);
 		}
@@ -200,6 +203,7 @@
 
 					if(replaceWords[i].indexOf("=") != -1){
 						tempTargetWord=replaceWords[i].split("=");
+
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
 
 						if(getBlnEx("S")){
@@ -218,7 +222,7 @@
 	}
 
 	function getCommentArray(){
-		commentArray = new Array();
+		var commentArray = new Array();
 		var tempArray = new Array();
 		var tempContent;
 		var diff=0;
@@ -247,6 +251,7 @@
 			tempCommentArray.push(new Array(parseTargetComment.substring(1),parseTargetComment.substring(0,1)));
 		}else{
 			tempArray = parseTargetComment.split("-");
+
 			tempCommentArray.push(new Array(tempArray[0].substring(1),tempArray[0].substring(0,1) + tempArray[1]));
 		}
 		return tempCommentArray;
@@ -458,6 +463,7 @@
 					if(commentArray.length>0 ){
 						if(index < commentArray.length){
 							tempCommentArray = commentArray[index][0];
+
 							if(tempCommentArray[0].match(/^[0-9]+/) && parseInt(tempCommentArray[0]) == i){
 								if(tempCommentArray[1].substring(0,1) == "S"){
 									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
@@ -536,9 +542,7 @@
 
 	function initBoolValueEx(blns){
 		var tempString;
-		//window.alert("blnSetting: "+blnSetting+" blns.length" + blns.length);
 		for (i=0;i<blns.length;i++){
-			//blns[i]=blns[i].replace(/&#34;/g,'');
 			tempString = blns[i].split("///");
 
 			if(blnSetting.indexOf(tempString[1]) != -1){
