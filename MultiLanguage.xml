@@ -29,67 +29,67 @@
 	var cssData = "__UP_css__";
 	var preprocessjsURL = "__UP_preprocessjsURL__";
 	var replaceData="__UP_replaceWords__";
-	var splitString = "__UP_splitword__"; 
+	var splitString = "__UP_splitword__";
 	var lang = getLang();
 	var prefs=new gadgets.Prefs();
 	var returnHtml="";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
-			
+
 	function doDisplay(){
 		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
 		}
 		setupData();
 	}
-		
+
 	function setupData(){
 		contentData = getTargetLangData(contentData,"Content not specified.");
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
-		
+
 	function getContentData(obj){
-		contentData = obj.text;	
-		
+		contentData = obj.text;
+
 		if(boolml && contentData.indexOf(splitString) != -1){
 			contentData = getTargetData(contentData);
 		}
 		setupReplaceData();
 	}
-	
+
 	function setupReplaceData(){
 		replaceData = getTargetLangData(replaceData,"");
 		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
-	
+
 	function getReplaceData(obj){
-		replaceData = obj.text;	
-		
+		replaceData = obj.text;
+
 		if(boolml && replaceData.indexOf(splitString) != -1){
 			replaceData = getTargetData(replaceData);
 		}
 		doProcessData();
 	}
-	
+
 	function doProcessData(){
 		returnHtml += changeData();
 		closeHTML();
 	}
-	
+
 	function changeData(){
 		if(to(contentData)){
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
 			}
-			
+
 			if(to(replaceData)){
 				contentData = doReplaceWords();
 			}
-			
+
 			return contentData;
 		}
 	}
-	
+
 	function doReplaceWords(){
 		var specifier =  "__UP_replaceSpecifier__";
 		var tempWords = "";
@@ -99,32 +99,19 @@
 		var prefix=specifier.substring(0,specifier.length/2);
 		var suffix=specifier.substring(specifier.length/2,specifier.length);;
 		var regexp;
-				
+
 		if(replaceData.indexOf(specifier+specifier) != -1){
 			tempWords = replaceData.split(specifier+specifier);
-			
-			if(tempWords[0].length>0){
-				if(tempWords[0].indexOf(specifier) != -1){
-					replaceWords = tempWords[0].split(specifier);
-				}else{
-					replaceWords = tempWords[0];
-				}
-				
-				for(i=0;i<replaceWords.length;i++){
-					regexp= new RegExp(prefix+i+suffix,"g");
-					contentData=contentData.replace(regexp,replaceWords[i]);
-				}
-			}
-			
+
 			if(tempWords[1].length>0){
 				if(tempWords[1].indexOf(specifier) != -1){
 					replaceWords = tempWords[1].split(specifier);
 				}else{
 					replaceWords = tempWords[1];
 				}
-			
+
 				for(i=0;i<replaceWords.length;i++){
-					
+
 					if(replaceWords[i].indexOf("=") != -1){
 						tempTargetWord=replaceWords[i].split("=");
 						tempReplaceWord=replaceWords[i].substring(replaceWords[i].indexOf("=")+1,replaceWords[i].length);
@@ -133,16 +120,16 @@
 						}else{
 							regexp= new RegExp(prefix+tempTargetWord[0]+suffix,"g");
 						}
-						
+
 						contentData=contentData.replace(regexp,tempReplaceWord);
 					}
 				}
-			} 
+			}
 		}
-		
+
 		return contentData;
 	}
-	
+
 	function getTargetLangData(sourceData,returnMessage){
 		if(to(sourceData)){
 			if(boolml && sourceData.indexOf(splitString) != -1){
@@ -151,10 +138,10 @@
 		}else{
 			sourceData = returnMessage;
 		}
-		
+
 		return sourceData;
 	}
-	
+
 	function doFork(targetBln,targeData,async,defaultMethod){
 		if(getBln(targetBln)){
 			if(targeData.substring(0,4)=="http"){
@@ -169,7 +156,7 @@
 			return;
 		}
 	}
-	
+
 	function to(object){
 		if(!(typeof object === "undefined") && object.length>0){
 			return true;
@@ -177,7 +164,7 @@
 			return false;
 		}
 	}
-	
+
 	function getBln(prefsname){
 		if(prefs.getBool(prefsname) == true){
 			return true;
@@ -185,22 +172,22 @@
 			return false;
 		}
 	}
-	
-	
+
+
 
 	function closeHTML(){
-	
+
 		if(!(getBln("htmlescape"))){
 			returnHtml = gadgets.util.unescapeString(returnHtml);
 		}
-	
+
 		document.getElementById('content_div').innerHTML += returnHtml;
-		
+
 		if(getBln("dynamicheight")){
 			gadgets.window.adjustHeight();
 		}
 	}
-	
+
 	function htmlUnescape(str){
 		str=str.replace(/&gt;/g,'>');
 		str=str.replace(/&lt;/g,'<');
@@ -209,27 +196,27 @@
 		str=str.replace(/&#34;/g,'"');
 		str=str.replace(/&quot;/g,'"');
 		str=str.replace(/&#39;/g,"'");
-		
+
 		return str;
 	}
-	
-	
+
+
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
 		var returnContent = tempContent[0].substring(3,tempContent[0].length);
 		var diff = 0;
-		
+
 		for(i=0;i<tempContent.length;i++){
 			for(var diff=0;diff<3;diff++){
 				if(tempContent[i].substring(0+diff,2+diff) == lang ){
 					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
 					break;
 				}
-			}	
+			}
 		}
 		return returnContent;
 	}
-	
+
 	function getRemoteData(contentURL,handler) {
 		var params = {};
 
@@ -237,7 +224,7 @@
 		var url= contentURL;
 		gadgets.io.makeRequest(url, handler, params);
 	}
-		
+
 	function getLang(){
 		return (navigator.userLanguage||navigator.browserLanguage||navigator.language).substr(0,2);
 	}
@@ -276,7 +263,7 @@
 		str=str.replace(/&#34;/g,'"');
 		str=str.replace(/&quot;/g,'"');
 		str=str.replace(/&#39;/g,"'");
-		
+
 		return str;
 	}
 
@@ -294,7 +281,7 @@
 	function initBoolValue(blns){
 		for (i=0;i<blns.length;i++){
 			var targetboolean=prefs.getBool(blns[i]);
-			
+
 			if(targetboolean ==true){
 				document.getElementById(blns[i]).checked=true;
 			}else{
@@ -376,7 +363,7 @@
 			<textarea id="replaceWords" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
-	
+
 	<tr>
 		<td>
 			<strong>content:</strong>
@@ -385,7 +372,7 @@
 			<textarea id="content" style="width: 100%; height: 400px" onchange="update()"></textarea>
 		</td>
 	</tr>
-	
+
 	<tr>
 		<td>
 			<strong>css:</strong>
@@ -402,7 +389,7 @@
 			<textarea id="preprocessjsURL" style="width: 100%;" onchange="update()"></textarea>
 		</td>
 	</tr>
-	
+
 </table>
 
 
