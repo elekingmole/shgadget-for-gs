@@ -112,9 +112,6 @@
 
 			if(to(commentData)){
 				commentArray = getCommentArray();
-				for(i=0;i<commentArray.length;i++){
-					alert(commentArray[i]);
-				}
 			}
 
 			return processTargetlineData(targetlineArray,strArray,commentArray);
@@ -437,7 +434,7 @@
 					if(commentArray.length>0 ){
 						if(index < commentArray.length){
 							tempCommentArray = commentArray[index][0];
-alert("tempCommentArray[0]: "+tempCommentArray[0]+" / " + commentArray[index][1] +" / i: " + i);
+alert("tempCommentArray[0]: "+tempCommentArray[0]+" / " + tempCommentArray[1] +" / index: " + index +" / i: " + i);
 							if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
 								alert("tempCommentArray[1]: "+tempCommentArray[1]);
 								if(tempCommentArray[1].substring(0,1) == "S"){
