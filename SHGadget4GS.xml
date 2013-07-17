@@ -93,7 +93,6 @@
 	}
 
 	function doProcessData(){
-		alert(commentData);
 		returnHtml += changeData();
 		closeHTML();
 	}
@@ -113,6 +112,9 @@
 
 			if(to(commentData)){
 				commentArray = getCommentArray();
+				for(i=0;i<commentArray.length;i++){
+					alert(commentArray[i]);
+				}
 			}
 
 			return processTargetlineData(targetlineArray,strArray,commentArray);
