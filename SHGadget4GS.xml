@@ -93,6 +93,7 @@
 	}
 
 	function doProcessData(){
+		alert(commentData);
 		returnHtml += changeData();
 		closeHTML();
 	}
