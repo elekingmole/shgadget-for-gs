@@ -66,35 +66,29 @@
 	}
 
 	function setupData(){
-		contentData = getTargetLangData(contentData);
-		doFork("D",contentData,getContentData,setupReplaceData);
+		doSetup("D",contentData,getContentData,setupReplaceData)
 	}
 
 	function getContentData(obj){
-		contentData = obj.text;
-		contentData = getTargetLangData(contentData);
+		contentData = getTargetLangData(obj.text);
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
-		replaceData = getTargetLangData(replaceData);
-		doFork("R",replaceData,getReplaceData,setupCommentData);
+		doSetup("R",replaceData,getReplaceData,setupCommentData);
 	}
 
 	function getReplaceData(obj){
-		replaceData = obj.text;
-		replaceData = getTargetLangData(replaceData);
+		replaceData = getTargetLangData(obj.text);
 		setupCommentData();
 	}
 
 	function setupCommentData(){
-		commentData = getTargetLangData(commentData);
-		doFork("C",commentData,getCommentData,doProcessData);
+		doSetup("C",commentData,getCommentData,doProcessData);
 	}
 
 	function getCommentData(obj){
-		commentData = obj.text;
-		commentData = getTargetLangData(commentData);
+		commentData = getTargetLangData(obj.text);
 		doProcessData();
 	}
 
@@ -124,6 +118,11 @@
 		}
 	}
 
+	function doSetup(mode,data,asyncMethod,nextMethod){
+		data=getTargetLangData(data);
+		doFork(mode,data,asyncMethod,nextMethod);
+	}
+
 	function getTargetLangData(sourceData){
 		if(to(sourceData)){
 			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
@@ -133,8 +132,6 @@
 
 		return sourceData;
 	}
-
-
 
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
