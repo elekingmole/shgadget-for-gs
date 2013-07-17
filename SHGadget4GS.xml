@@ -431,8 +431,8 @@
 		for (i=0;i<targetlineArray.length;i++){
 			//alert("matchNumber(): "+matchNumber(targetlineArray[i])+" / targetlineArray[i]: "+targetlineArray[i]+" / i: " + i);
 			if(matchNumber(targetlineArray[i])){
-				alert("to(strArray[]): "+to(strArray[parseInt(targetlineArray[i]) + baseLine]) +" / i: " + i +"\r\n" + " / " + strArray[parseInt(targetlineArray[i]) + baseLine]);
-				if(to(strArray[parseInt(targetlineArray[i]) + baseLine])){
+				//alert("to(strArray[]): "+to(strArray[parseInt(targetlineArray[i]) + baseLine]) +" / i: " + i +"\r\n" + " / " + strArray[parseInt(targetlineArray[i]) + baseLine]);
+				//if(to(strArray[parseInt(targetlineArray[i]) + baseLine])){
 					if(commentArray.length>0 ){
 						if(index < commentArray.length){
 							tempCommentArray = commentArray[index][0];
@@ -477,7 +477,7 @@
 					}else{
 						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
 					}
-				}
+				//}
 
 			}else if(targetlineArray[i].substring(0,1) =="S" && targetlineArray[i].length>1){
 				returnData+= targetlineArray[i].substring(1,targetlineArray[i].length) + "\r\n";
