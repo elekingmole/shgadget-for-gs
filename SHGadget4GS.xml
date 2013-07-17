@@ -437,8 +437,9 @@
 					if(commentArray.length>0 ){
 						if(index < commentArray.length){
 							tempCommentArray = commentArray[index][0];
-
+alert("tempCommentArray[0]: "+tempCommentArray[0]+" / " + commentArray[index][1]);
 							if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
+								alert("tempCommentArray[1]: "+tempCommentArray[1]);
 								if(tempCommentArray[1].substring(0,1) == "S"){
 									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
 									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
