@@ -429,14 +429,15 @@
 		var tempCommentArray = new Array();
 
 		for (i=0;i<targetlineArray.length;i++){
+			alert("matchNumber(): "+matchNumber(targetlineArray[i])+" / targetlineArray[i]: "+targetlineArray[i]+" / i: " + i);
 			if(matchNumber(targetlineArray[i])){
 				if(to(strArray[parseInt(targetlineArray[i]) + baseLine])){
 					if(commentArray.length>0 ){
 						if(index < commentArray.length){
 							tempCommentArray = commentArray[index][0];
-alert("tempCommentArray[0]: "+tempCommentArray[0]+" / " + tempCommentArray[1] +" / index: " + index +" / i: " + i);
+//alert("tempCommentArray[0]: "+tempCommentArray[0]+" / " + tempCommentArray[1] +" / index: " + index +" / i: " + i);
 							if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
-								alert("tempCommentArray[1]: "+tempCommentArray[1]);
+								//alert("tempCommentArray[1]: "+tempCommentArray[1]);
 								if(tempCommentArray[1].substring(0,1) == "S"){
 									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
 									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
