@@ -66,43 +66,35 @@
 	}
 
 	function setupData(){
-		contentData = getTargetLangData(contentData,"Content not specified.");
+		contentData = getTargetLangData(contentData);
 		doFork("D",contentData,getContentData,setupReplaceData);
 	}
 
 	function getContentData(obj){
 		contentData = obj.text;
-		if(getBlnEx("M") && contentData.indexOf(splitString) != -1){
-			contentData = getTargetData(contentData);
-		}
+		contentData = getTargetLangData(contentData);
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
-		replaceData = getTargetLangData(replaceData,"");
+		replaceData = getTargetLangData(replaceData);
 		doFork("R",replaceData,getReplaceData,setupCommentData);
-
 	}
 
 	function getReplaceData(obj){
 		replaceData = obj.text;
-		if(getBlnEx("M") && replaceData.indexOf(splitString) != -1){
-			replaceData = getTargetData(replaceData);
-		}
+		replaceData = getTargetLangData(replaceData);
 		setupCommentData();
 	}
 
 	function setupCommentData(){
-		commentData = getTargetLangData(commentData,"");
+		commentData = getTargetLangData(commentData);
 		doFork("C",commentData,getCommentData,doProcessData);
 	}
 
 	function getCommentData(obj){
 		commentData = obj.text;
-
-		if(getBlnEx("M") && commentData.indexOf(splitString) != -1){
-			commentData = getTargetData(commentData);
-		}
+		commentData = getTargetLangData(commentData);
 		doProcessData();
 	}
 
@@ -112,7 +104,6 @@
 	}
 
 	function changeData(){
-
 		if(to(contentData)){
 			if(to(preprocessjsURL)){
 				contentData = doModify(contentData);
@@ -125,24 +116,19 @@
 			strArray = getStrArray();
 			targetlineArray = getTargetLineArray();
 
-
 			if(to(commentData)){
 				commentArray = getCommentArray();
 			}
-
-
 
 			return processTargetlineData(targetlineArray,strArray,commentArray);
 		}
 	}
 
-	function getTargetLangData(sourceData,returnMessage){
+	function getTargetLangData(sourceData){
 		if(to(sourceData)){
 			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
 				sourceData = getTargetData(sourceData);
 			}
-		}else{
-			sourceData = returnMessage;
 		}
 
 		return sourceData;
@@ -673,7 +659,7 @@
 	</tr>
 	<tr>
 		<td>
-			<strong>Commnet:</strong>
+			<strong>Comment:</strong>
 		</td>
 		<td>
 			<textarea id="comment" style="width: 100%;" onchange="update()"></textarea>
