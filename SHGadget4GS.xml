@@ -429,55 +429,49 @@
 		var tempCommentArray = new Array();
 
 		for (i=0;i<targetlineArray.length;i++){
-			//alert("matchNumber(): "+matchNumber(targetlineArray[i])+" / targetlineArray[i]: "+targetlineArray[i]+" / i: " + i);
 			if(matchNumber(targetlineArray[i])){
-				//alert("to(strArray[]): "+to(strArray[parseInt(targetlineArray[i]) + baseLine]) +" / i: " + i +"\r\n" + " / " + strArray[parseInt(targetlineArray[i]) + baseLine]);
-				//if(to(strArray[parseInt(targetlineArray[i]) + baseLine])){
-					if(commentArray.length>0 ){
-						if(index < commentArray.length){
-							tempCommentArray = commentArray[index][0];
-//alert("tempCommentArray[0]: "+tempCommentArray[0]+" / " + tempCommentArray[1] +" / index: " + index +" / i: " + i);
-							if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
-								//alert("tempCommentArray[1]: "+tempCommentArray[1]);
-								if(tempCommentArray[1].substring(0,1) == "S"){
-									returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
-									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
+				if(commentArray.length>0 ){
+					if(index < commentArray.length){
+						tempCommentArray = commentArray[index][0];
+						if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
+							if(tempCommentArray[1].substring(0,1) == "S"){
+								returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ "\r\n";
+								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
 
-									if(index+1 < commentArray.length){
-										tempCommentArray = commentArray[index+1][0];
-										if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
-											if(tempCommentArray[1].substring(0,1) == "A"){
-												returnData+=tempCommentArray[1].substring(1,tempCommentArray[1].length);
-												index+=1;
-											}else if(tempCommentArray[1].substring(0,1) == "N"){
-												returnData+="\r\n";
-												index+=1;
-											}
+								if(index+1 < commentArray.length){
+									tempCommentArray = commentArray[index+1][0];
+									if(matchNumber(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
+										if(tempCommentArray[1].substring(0,1) == "A"){
+											returnData+=tempCommentArray[1].substring(1,tempCommentArray[1].length);
+											index+=1;
+										}else if(tempCommentArray[1].substring(0,1) == "N"){
+											returnData+="\r\n";
+											index+=1;
 										}
 									}
-
-									returnData+="\r\n";
-								}else if(tempCommentArray[1].substring(0,1) == "A"){
-									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine] +
-										tempCommentArray[1].substring(1,tempCommentArray[1].length) + "\r\n";
-								}else if(tempCommentArray[1].substring(0,1) == "N"){
-									returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+"\r\n\r\n";
-								}else{
-									returnData+= "\r\n";
 								}
 
-								index +=1;
-
+								returnData+="\r\n";
+							}else if(tempCommentArray[1].substring(0,1) == "A"){
+								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine] +
+									tempCommentArray[1].substring(1,tempCommentArray[1].length) + "\r\n";
+							}else if(tempCommentArray[1].substring(0,1) == "N"){
+								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+"\r\n\r\n";
 							}else{
-								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
+								returnData+= "\r\n";
 							}
+
+							index +=1;
+
 						}else{
 							returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
 						}
 					}else{
 						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
 					}
-				//}
+				}else{
+					returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ "\r\n";
+				}
 
 			}else if(targetlineArray[i].substring(0,1) =="S" && targetlineArray[i].length>1){
 				returnData+= targetlineArray[i].substring(1,targetlineArray[i].length) + "\r\n";
