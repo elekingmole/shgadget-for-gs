@@ -298,43 +298,42 @@
 	function unfoldTargetArray(tempTargetlineArray){
 	}
 
-	function getTargetArray(Targetline,tempStrArray){
-		var returnArray = new Array();
+	function getTargetArray(tempTargetlineString,tempStrArray){
+		alert(tempTargetlineString);
+	}
 
-		if((Targetline.indexOf(",") != -1 )){
-			returnArray = Targetline.split(",");
+
+	function getTargetline(tempTargetlineString,tempStrArray){
+		var tempTargetlineArray = new Array();
+		var returnTargetlineArray = new Array();
+		var lineMax = tempStrArray.length;
+
+		getTargetArray(tempTargetlineString,tempStrArray);
+
+		if((tempTargetlineString.indexOf(",") != -1 )){
+			tempTargetlineArray = tempTargetlineString.split(",");
 		}else{
-			if(Targetline.indexOf("F") != -1){
+			if(tempTargetlineString.indexOf("F") != -1){
 				var index;
 
-				if(Targetline.length == 1){
+				if(tempTargetlineString.length == 1){
 					index= 0;
 				}else{
-					index = parseInt(Targetline.substring(1,Targetline.length));
+					index = parseInt(tempTargetlineString.substring(1,tempTargetlineString.length));
 				}
 
 				if(tempStrArray[index].indexOf("L-I-N-E")!=-1){
 					var targetlinefromSource = tempStrArray[index].split("L-I-N-E");
 					if(targetlinefromSource[1].length>0){
-						returnArray = targetlinefromSource[1].split(",");
+						tempTargetlineArray = targetlinefromSource[1].split(",");
 					}
 				}else{
 					window.alert("Line not designated ");
 				}
 			}else{
-				returnArray.push(Targetline);
+				tempTargetlineArray.push(tempTargetlineString);
 			}
 		}
-		alert(returnArray);
-		return returnArray:;
-	}
-
-
-	function getTargetline(tempTargetlineString,tempStrArray){
-		alert("test");
-		var tempTargetlineArray = getTargetArray(tempTargetlineString,tempStrArray);
-		var returnTargetlineArray = new Array();
-		var lineMax = tempStrArray.length;
 
 		var tempUnfoldedArray;
 		for(t= 0;t<= tempTargetlineArray.length;t++){
