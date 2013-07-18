@@ -54,12 +54,13 @@
 	var blnSettingValues;
 	var rn ="\r\n";
 	var lang = getLang();
+	var boolml = getBlnEx("M");
 
 	function doHighlight(){
 		blnSettingValues = prefs.getString("blnSettingValues").replace(/&#34;/g,'');
 
 		if(getBlnEx("D") && getBlnEx("U")){
-			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+"\n\n";
+			returnHtml +="<a href='__UP_content__' target='_blank'>__UP_content__</a>"+rn;
 		}
 		returnHtml +="<pre id='code_pre'  class='brush:__UP_languagelower__;__UP_shOption__' title='__UP_shtitle__' >";
 		setupData();
@@ -125,7 +126,7 @@
 
 	function getTargetLangData(sourceData){
 		if(to(sourceData)){
-			if(getBlnEx("M") && sourceData.indexOf(splitString) != -1){
+			if(boolml && sourceData.indexOf(splitString) != -1){
 				sourceData = getTargetData(sourceData);
 			}
 		}
@@ -437,39 +438,42 @@
 		var defbln=true;
 		
 		for (i=0;i<targetlineArray.length;i++){
-			if(c_Number(targetlineArray[i]) && commentArray.length>0 && index < commentArray.length){
-				tempCommentArray = commentArray[index][0];
-				if(c_Number(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
-					if(c_Head(tempCommentArray[1],"S")){
-						returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ rn;
-						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
+			if(c_Number(targetlineArray[i])  ){
+				if(commentArray.length>0 ){
+					if(index < commentArray.length){
+						tempCommentArray = commentArray[index][0];
+						if(c_Number(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
+							if(c_Head(tempCommentArray[1],"S")){
+								returnData+= tempCommentArray[1].substring(1,tempCommentArray[1].length)+ rn;
+								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine];
 
-						if(index+1 < commentArray.length){
-							tempCommentArray = commentArray[index+1][0];
-							if(c_Number(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
-								if(c_Head(tempCommentArray[1],"A")){
-									returnData+=tempCommentArray[1].substring(1,tempCommentArray[1].length);
-									index+=1;
-								}else if(c_Head(tempCommentArray[1],"N")){
-									returnData+=rn;
-									index+=1;
+								if(index+1 < commentArray.length){
+									tempCommentArray = commentArray[index+1][0];
+									if(c_Number(tempCommentArray[0]) && parseInt(tempCommentArray[0]) == i){
+										if(c_Head(tempCommentArray[1],"A")){
+											returnData+=tempCommentArray[1].substring(1,tempCommentArray[1].length);
+											index+=1;
+										}else if(c_Head(tempCommentArray[1],"N")){
+											returnData+=rn;
+											index+=1;
+										}
+									}
 								}
+
+								returnData+=rn;
+							}else if(c_Head(tempCommentArray[1],"A")){
+								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine] +
+									tempCommentArray[1].substring(1,tempCommentArray[1].length) + rn;
+							}else if(c_Head(tempCommentArray[1],"N")){
+								returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+rn+rn;
+							}else{
+								returnData+= rn;
 							}
+
+							index +=1;
+							defbln=false;
 						}
-
-						returnData+=rn;
-
-					}else if(c_Head(tempCommentArray[1],"A")){
-						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine] +
-							tempCommentArray[1].substring(1,tempCommentArray[1].length) + rn;
-					}else if(c_Head(tempCommentArray[1],"N")){
-						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+rn+rn;
-					}else{
-						returnData+= rn;
 					}
-
-					index +=1;
-					defbln=false;
 				}
 
 				if(defbln){
