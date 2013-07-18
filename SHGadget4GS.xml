@@ -261,12 +261,10 @@
 				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
-			defaultMethod();
-			return;
-		}else{
-			defaultMethod();
-			return;
 		}
+
+		defaultMethod();
+		return;
 	}
 
 	function getRemoteData(contentURL,handler) {
