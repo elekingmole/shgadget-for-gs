@@ -223,7 +223,6 @@
 			tempCommentArray.push(new Array(parseTargetComment.substring(1),parseTargetComment.substring(0,1)));
 		}else{
 			tempArray = parseTargetComment.split("-");
-
 			tempCommentArray.push(new Array(tempArray[0].substring(1),tempArray[0].substring(0,1) + tempArray[1]));
 		}
 		return tempCommentArray;
@@ -237,7 +236,6 @@
 		}else{
 			strArray = str.split("&#10;");
 		}
-
 		return strArray;
 	}
 
@@ -436,7 +434,7 @@
 		var defbln=true;
 		
 		for (i=0;i<targetlineArray.length;i++){
-			if(c_Number(targetlineArray[i])  ){
+			if(c_Number(targetlineArray[i])){
 				if(commentArray.length>0 ){
 					if(index < commentArray.length){
 						tempCommentArray = commentArray[index][0];
@@ -479,14 +477,6 @@
 				}else{
 					defbln=true;
 				}
-				
-			}else if(c_Head(targetlineArray[i],"S") && targetlineArray[i].length>1){
-				returnData+= targetlineArray[i].substring(1,targetlineArray[i].length) + rn;
-			}else if(c_Head(targetlineArray[i],"A") && targetlineArray[i].length>1){
-				returnData= returnData.substring(0,returnData.length-1)+
-					targetlineArray[i].substring(1,targetlineArray[i].length) + rn;
-			}else if(c_Head(targetlineArray[i],"N")){
-				returnData+= rn;
 			}
 		}
 		return returnData;
