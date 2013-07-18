@@ -434,7 +434,8 @@
 		var baseLine = __UP_baseline__;
 		var index =0;
 		var tempCommentArray = new Array();
-
+		var defbln=true;
+		
 		for (i=0;i<targetlineArray.length;i++){
 			if(c_Number(targetlineArray[i])){
 				if(commentArray.length>0 ){
@@ -469,17 +470,17 @@
 							}
 
 							index +=1;
-
-						}else{
-							returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ rn;
+							defbln=false;
 						}
-					}else{
-						returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ rn;
 					}
-				}else{
-					returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ rn;
 				}
 
+				if(defbln){
+					returnData+=strArray[parseInt(targetlineArray[i]) +baseLine]+ rn;
+				}else{
+					defbln=true;
+				}
+				
 			}else if(c_Head(targetlineArray[i],"S") && targetlineArray[i].length>1){
 				returnData+= targetlineArray[i].substring(1,targetlineArray[i].length) + rn;
 			}else if(c_Head(targetlineArray[i],"A") && targetlineArray[i].length>1){
