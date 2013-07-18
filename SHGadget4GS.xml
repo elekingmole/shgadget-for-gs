@@ -325,18 +325,18 @@
 				tempTargetlineArray.push(tempTargetlineString);
 			}
 		}
-		alert(tempTargetlineArray);
+		return tempTargetlineArray;
 	}
 
 
 	function getTargetline(tempTargetlineString,tempStrArray){
-		var tempTargetlineArray = new Array();
+		var tempTargetlineArray = getTargetArray(tempTargetlineString,tempStrArray);
 		var returnTargetlineArray = new Array();
 		var lineMax = tempStrArray.length;
 
-		getTargetArray(tempTargetlineString,tempStrArray);
+		
 
-		if((tempTargetlineString.indexOf(",") != -1 )){
+		/*if((tempTargetlineString.indexOf(",") != -1 )){
 			tempTargetlineArray = tempTargetlineString.split(",");
 		}else{
 			if(tempTargetlineString.indexOf("F") != -1){
@@ -359,7 +359,7 @@
 			}else{
 				tempTargetlineArray.push(tempTargetlineString);
 			}
-		}
+		}*/
 
 		var tempUnfoldedArray;
 		for(t= 0;t<= tempTargetlineArray.length;t++){
