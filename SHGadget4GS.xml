@@ -325,7 +325,7 @@
 				returnArray.push(tempTargetlineString);
 			}
 		}
-
+		alert(returnArray);
 		return returnArray:;
 	}
 
