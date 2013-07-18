@@ -331,6 +331,7 @@
 
 
 	function getTargetline(tempTargetlineString,tempStrArray){
+		alert("test");
 		var tempTargetlineArray = getTargetArray(tempTargetlineString,tempStrArray);
 		var returnTargetlineArray = new Array();
 		var lineMax = tempStrArray.length;
