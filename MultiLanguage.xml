@@ -42,14 +42,14 @@
 
 	function doDisplay(){
 		if(to(cssData)){
-			returnHtml += htmlUnescape(cssData);
+			returnHtml += htmlUnescape(getTargetLangData(cssData));
 		}
 		setupData();
 	}
 
 	function setupData(){
 		contentData=getTargetLangData(contentData);
-		doSetup("remotedata",contentData,getContentData,setupReplaceData);
+		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
 
 	function getContentData(obj){
@@ -59,7 +59,7 @@
 
 	function setupReplaceData(){
 		replaceData=getTargetLangData(replaceData);
-		doSetup("remotereplacedata",replaceData,getReplaceData,doProcessData);
+		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
 
 	function getReplaceData(obj){
@@ -124,10 +124,6 @@
 		}
 
 		return contentData;
-	}
-
-	function doSetup(mode,data,asyncMethod,nextMethod){
-		doFork(mode,data,asyncMethod,nextMethod);
 	}
 
 	function doFork(targetBln,targeData,async,defaultMethod){
