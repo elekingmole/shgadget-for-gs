@@ -44,8 +44,9 @@
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
 		doFork("remotedata",cssData,getCssData,setupData);
+		}else{
+			setupData();
 		}
-		setupData();
 	}
 
 	function getCssData(obj){
