@@ -53,6 +53,7 @@
 
 	function getContentData(obj){
 		contentData=getTargetLangData(obj.text);
+		alert("getContentData: "+contentData);
 		setupReplaceData();
 	}
 
@@ -80,6 +81,7 @@
 				contentData = doReplaceWords();
 			}
 
+			alert("getContentData: "+contentData);
 			return contentData;
 		}
 	}
@@ -182,6 +184,18 @@
 		return str;
 	}
 
+	function getTargetLangData(sourceData){
+		if(to(sourceData)){
+			if(boolml && sourceData.indexOf(splitString) != -1){
+				alert("pre_src: " + sourceData);
+				sourceData = getTargetData(sourceData);
+			}
+		}
+
+		alert("src: " + sourceData);
+		return sourceData;
+	}
+
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
 		var returnContent = tempContent[0].substring(3,tempContent[0].length);
@@ -192,7 +206,6 @@
 				
 				if(tempContent[i].substring(0+diff,2+diff) == lang ){
 					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
-					alert("returnContent: " + returnContent);
 					break;
 				}
 			}
@@ -206,18 +219,6 @@
 		params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
 		var url= contentURL;
 		gadgets.io.makeRequest(url, handler, params);
-	}
-
-	function getTargetLangData(sourceData){
-		if(to(sourceData)){
-			if(boolml && sourceData.indexOf(splitString) != -1){
-				alert("pre_src: " + sourceData);
-				sourceData = getTargetData(sourceData);
-			}
-		}
-
-		alert("src: " + sourceData);
-		return sourceData;
 	}
 
 	function doSetup(mode,data,asyncMethod,nextMethod){
