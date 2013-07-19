@@ -36,6 +36,10 @@
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
 
+
+
+	
+
 	function doDisplay(){
 		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
@@ -44,30 +48,20 @@
 	}
 
 	function setupData(){
-		contentData = getTargetLangData(contentData,"Content not specified.");
-		doFork("remotedata",contentData,getContentData,setupReplaceData);
+		doSetup("remotedata",contentData,getContentData,setupReplaceData);
 	}
 
 	function getContentData(obj){
-		contentData = obj.text;
-
-		if(boolml && contentData.indexOf(splitString) != -1){
-			contentData = getTargetData(contentData);
-		}
+		contentData=getTargetLangData(obj.text);
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
-		replaceData = getTargetLangData(replaceData,"");
-		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);
+		doSetup("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
 
 	function getReplaceData(obj){
-		replaceData = obj.text;
-
-		if(boolml && replaceData.indexOf(splitString) != -1){
-			replaceData = getTargetData(replaceData);
-		}
+		replaceData = getTargetLangData(obj.text);
 		doProcessData();
 	}
 
@@ -130,18 +124,6 @@
 		return contentData;
 	}
 
-	function getTargetLangData(sourceData,returnMessage){
-		if(to(sourceData)){
-			if(boolml && sourceData.indexOf(splitString) != -1){
-				sourceData = getTargetData(sourceData);
-			}
-		}else{
-			sourceData = returnMessage;
-		}
-
-		return sourceData;
-	}
-
 	function doFork(targetBln,targeData,async,defaultMethod){
 		if(getBln(targetBln)){
 			if(targeData.substring(0,4)=="http"){
@@ -200,7 +182,6 @@
 		return str;
 	}
 
-
 	function getTargetData(targetData){
 		var tempContent = targetData.split(splitString);
 		var returnContent = tempContent[0].substring(3,tempContent[0].length);
@@ -224,6 +205,22 @@
 		var url= contentURL;
 		gadgets.io.makeRequest(url, handler, params);
 	}
+
+	function getTargetLangData(sourceData){
+		if(to(sourceData)){
+			if(boolml && sourceData.indexOf(splitString) != -1){
+				sourceData = getTargetData(sourceData);
+			}
+		}
+
+		return sourceData;
+	}
+
+	function doSetup(mode,data,asyncMethod,nextMethod){
+		data=getTargetLangData(data);
+		doFork(mode,data,asyncMethod,nextMethod);
+	}
+
 
 	function getLang(){
 		return (navigator.userLanguage||navigator.browserLanguage||navigator.language).substr(0,2);

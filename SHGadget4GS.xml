@@ -296,7 +296,33 @@
 		return str;
 	}
 
-	function unfoldTargetArray(tempTargetlineArray){
+	function getTargetline(tempTargetlineString,tempStrArray){
+		var tempTargetlineArray = getTargetArray(tempTargetlineString,tempStrArray);
+		var returnTargetlineArray = new Array();
+		
+		var tempUnfoldedArray;
+		for(t= 0;t<= tempTargetlineArray.length;t++){
+			if(to(tempTargetlineArray[t])){
+				tempUnfoldedArray=getUnfoldedArray(tempTargetlineArray[t],tempStrArray.length);
+
+				for(x= 0;x<= tempUnfoldedArray.length;x++){
+					if(to(tempUnfoldedArray[x])){
+						if(tempUnfoldedArray[x].indexOf(",") != -1){
+							var tempSplitArray = tempUnfoldedArray[x].split(",");
+
+							for(w= 0;w<= tempSplitArray.length;w++){
+								if(to(tempSplitArray[w])){
+									returnTargetlineArray.push(tempSplitArray[w]);
+								}
+							}
+						}else{
+							returnTargetlineArray.push(tempUnfoldedArray[x]);
+						}
+					}
+				}
+			}
+		}
+		return returnTargetlineArray;
 	}
 
 	function getTargetArray(TargetlineString,tempStrArray){
@@ -330,7 +356,7 @@
 	}
 
 
-	function getUnfoldedArray(targetLineArray){
+	function getUnfoldedArray(targetLineArray,lineMax){
 		var returnArray = new Array();
 		if(targetLineArray.indexOf("-") != -1 ){
 			var tempNumber = targetLineArray.split("-");
@@ -352,57 +378,6 @@
 			returnArray.push(targetLineArray);
 		}
 		return returnArray;
-	}
-
-	function getTargetline(tempTargetlineString,tempStrArray){
-		var tempTargetlineArray = getTargetArray(tempTargetlineString,tempStrArray);
-		var returnTargetlineArray = new Array();
-		var lineMax = tempStrArray.length;
-
-		var tempUnfoldedArray;
-		for(t= 0;t<= tempTargetlineArray.length;t++){
-			if(to(tempTargetlineArray[t])){
-
-				/*if(tempTargetlineArray[t].indexOf("-") != -1 ){
-					var tempNumber = tempTargetlineArray[t].split("-");
-
-					if(tempNumber[0].length>0 && tempNumber[1].length>0){
-						if(c_Number(tempNumber[0]) && c_Number(tempNumber[1])){
-							tempUnfoldedArray=unfoldTargetline(parseInt(tempNumber[0]),parseInt(tempNumber[1]));
-						}
-					}else if(tempNumber[0].length>0){
-						if(c_Number(tempNumber[0])){
-							tempUnfoldedArray=unfoldTargetline(parseInt(tempNumber[0]),lineMax);
-						}
-					}else if(tempNumber[1].length>0){
-						if(c_Number(tempNumber[1])){
-							tempUnfoldedArray=unfoldTargetline(0,parseInt(tempNumber[1]));
-						}
-					}
-				}else{
-					tempUnfoldedArray.push(tempTargetlineArray[t]);
-				}*/
-
-				tempUnfoldedArray=getUnfoldedArray(tempTargetlineArray[t]);
-
-				for(x= 0;x<= tempUnfoldedArray.length;x++){
-					if(to(tempUnfoldedArray[x])){
-						if(tempUnfoldedArray[x].indexOf(",") != -1){
-							var tempSplitArray = tempUnfoldedArray[x].split(",");
-
-							for(w= 0;w<= tempSplitArray.length;w++){
-								if(to(tempSplitArray[w])){
-									returnTargetlineArray.push(tempSplitArray[w]);
-								}
-							}
-						}else{
-							returnTargetlineArray.push(tempUnfoldedArray[x]);
-						}
-					}
-				}
-			}
-		}
-		return returnTargetlineArray;
 	}
 
 	function unfoldTargetline(startline,endline){
