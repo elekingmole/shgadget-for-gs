@@ -39,8 +39,9 @@
 	function doDisplay(){
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
-alert("cssData:"+cssData);
 alert("cssData 0-4:"+cssData.substring(0,4));
+alert("cssData 1-3:"+cssData.substring(1,3));
+
 			if(cssData.substring(0,4)=="http"){
 				alert("http");
 				getRemoteData(cssData.substring(0,cssData.length),setupData);
