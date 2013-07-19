@@ -69,7 +69,7 @@
 
 	function setupData(){
 		contentData=getTargetLangData(contentData);
-		doSetup("D",contentData,getContentData,setupReplaceData)
+		doForkEx("D",contentData,getContentData,setupReplaceData)
 	}
 
 	function getContentData(obj){
@@ -79,7 +79,7 @@
 
 	function setupReplaceData(){
 		replaceData=getTargetLangData(replaceData);
-		doSetup("R",replaceData,getReplaceData,setupCommentData);
+		doForkEx("R",replaceData,getReplaceData,setupCommentData);
 	}
 
 	function getReplaceData(obj){
@@ -89,7 +89,7 @@
 
 	function setupCommentData(){
 		commentData=getTargetLangData(commentData);
-		doSetup("C",commentData,getCommentData,doProcessData);
+		doForkEx("C",commentData,getCommentData,doProcessData);
 	}
 
 	function getCommentData(obj){
@@ -121,10 +121,6 @@
 
 			return processTargetlineData(targetlineArray,strArray,commentArray);
 		}
-	}
-
-	function doSetup(mode,data,asyncMethod,nextMethod){
-		doFork(mode,data,asyncMethod,nextMethod);
 	}
 
 	function getTargetLangData(sourceData){
@@ -253,7 +249,7 @@
 		return targetlineArray;
 	}
 
-	function doFork(targetBlnWord,targeData,async,defaultMethod){
+	function doForkEx(targetBlnWord,targeData,async,defaultMethod){
 		if(getBlnEx(targetBlnWord)){
 			if(targeData.substring(0,4)=="http"){
 				getRemoteData(targeData.substring(0,targeData.length),async);
@@ -397,14 +393,6 @@
 
 	function to(object){
 		if(!(typeof object === "undefined") && object.length>0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	function getBln(prefsname){
-		if(prefs.getBool(prefsname) == true){
 			return true;
 		}else{
 			return false;

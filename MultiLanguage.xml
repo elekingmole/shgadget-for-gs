@@ -42,9 +42,7 @@
 
 	function doDisplay(){
 		if(to(cssData)){
-			alert("pre cssData: "+ cssData);
 			cssData=getTargetLangData(cssData);
-			alert("cssData: "+ cssData);
 		doFork("remotedata",cssData,getCssData,setupData);
 		}else{
 			setupData();
@@ -53,17 +51,13 @@
 
 	function getCssData(obj){
 		cssData=getTargetLangData(obj.text);
-		alert("getCssData: "+ cssData);
 		setupData();
 	}
 
 	function setupData(){
-		alert("pre setupData: "+ cssData);
 		if(to(cssData)){
-			alert("setupData: cssData: "+ cssData);
 			returnHtml += htmlUnescape(cssData);
 		}
-		alert("returnHtml: "+ returnHtml);
 		contentData=getTargetLangData(contentData);
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
@@ -143,23 +137,18 @@
 	}
 
 	function doFork(targetBln,targeData,async,defaultMethod){
-		alert("doFork");
 		if(getBln(targetBln)){
 			if(targeData.substring(0,4)=="http"){
-				alert("http");
 				getRemoteData(targeData.substring(0,targeData.length),async);
 				return;
 			}else if(targeData.substring(1,4)=="htt"){
-				alert("htt");
 				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
-			defaultMethod();
-		}else{
-			alert("def");
-			defaultMethod();
-			return;
 		}
+
+		defaultMethod();
+		return;
 	}
 
 	function to(object){
@@ -171,12 +160,9 @@
 	}
 
 	function getBln(prefsname){
-		alert("getBln");
 		if(prefs.getBool(prefsname) == true){
-			alert("getBln t");
 			return true;
 		}else{
-			alert("getBln f");
 			return false;
 		}
 	}
