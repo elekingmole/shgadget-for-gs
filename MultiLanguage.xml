@@ -54,11 +54,12 @@
 
 	function getContentData(obj){
 		contentData=getTargetLangData(obj.text);
-		alert("getContentData: "+contentData);
+		alert("getContentData1: "+contentData);
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
+		alert("getContentData2: "+contentData);
 		replaceData=getTargetLangData(replaceData);
 		doSetup("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
