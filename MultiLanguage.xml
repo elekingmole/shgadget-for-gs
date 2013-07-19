@@ -41,6 +41,7 @@
 	
 
 	function doDisplay(){
+		alert("boolml: "+boolml);
 		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
 		}
