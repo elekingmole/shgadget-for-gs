@@ -81,8 +81,10 @@
 				contentData = doReplaceWords();
 			}
 
-			alert("getContentData: "+contentData);
+			alert("changeData: "+contentData);
 			return contentData;
+		}else{
+			alert("not changeData: "+contentData);
 		}
 	}
 
