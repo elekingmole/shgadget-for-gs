@@ -42,7 +42,9 @@
 
 	function doDisplay(){
 		if(to(cssData)){
+			alert("pre cssData: "+ cssData);
 			cssData=getTargetLangData(cssData);
+			alert("cssData: "+ cssData);
 		doFork("remotedata",cssData,getCssData,setupData);
 		}else{
 			setupData();
@@ -56,6 +58,7 @@
 
 	function setupData(){
 		if(to(cssData)){
+			alert("setupData: cssData: "+ cssData);
 			returnHtml += htmlUnescape(cssData);
 		}
 
