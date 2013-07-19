@@ -170,9 +170,12 @@
 	}
 
 	function getBln(prefsname){
+		alert("getBln");
 		if(prefs.getBool(prefsname) == true){
+			alert("getBln t");
 			return true;
 		}else{
+			alert("getBln f");
 			return false;
 		}
 	}
