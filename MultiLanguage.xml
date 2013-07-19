@@ -61,7 +61,7 @@
 			alert("setupData: cssData: "+ cssData);
 			returnHtml += htmlUnescape(cssData);
 		}
-
+		alert("returnHtml: "+ returnHtml);
 		contentData=getTargetLangData(contentData);
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
