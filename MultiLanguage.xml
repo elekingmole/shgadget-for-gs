@@ -48,6 +48,7 @@
 	}
 
 	function setupData(){
+		contentData=getTargetLangData(contentData);
 		doSetup("remotedata",contentData,getContentData,setupReplaceData);
 	}
 
@@ -58,6 +59,7 @@
 	}
 
 	function setupReplaceData(){
+		replaceData=getTargetLangData(replaceData);
 		doSetup("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
 
@@ -125,6 +127,10 @@
 		}
 
 		return contentData;
+	}
+
+	function doSetup(mode,data,asyncMethod,nextMethod){
+		doFork(mode,data,asyncMethod,nextMethod);
 	}
 
 	function doFork(targetBln,targeData,async,defaultMethod){
@@ -221,13 +227,7 @@
 		var url= contentURL;
 		gadgets.io.makeRequest(url, handler, params);
 	}
-
-	function doSetup(mode,data,asyncMethod,nextMethod){
-		data=getTargetLangData(data);
-		doFork(mode,data,asyncMethod,nextMethod);
-	}
-
-
+	
 	function getLang(){
 		return (navigator.userLanguage||navigator.browserLanguage||navigator.language).substr(0,2);
 	}
