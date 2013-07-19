@@ -194,8 +194,6 @@
 					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
 					alert("returnContent: " + returnContent);
 					break;
-				}else{
-					alert("lang: "+(tempContent[i].substring(0+diff,2+diff))+" /Blang: " + lang);
 				}
 			}
 		}
@@ -213,11 +211,12 @@
 	function getTargetLangData(sourceData){
 		if(to(sourceData)){
 			if(boolml && sourceData.indexOf(splitString) != -1){
-				alert("src: " + sourceData);
+				alert("pre_src: " + sourceData);
 				sourceData = getTargetData(sourceData);
 			}
 		}
 
+		alert("src: " + sourceData);
 		return sourceData;
 	}
 
