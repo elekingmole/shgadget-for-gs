@@ -40,7 +40,7 @@
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
 alert("cssData:"+cssData);
-alert("cssData 0-5:"+cssData.substring(0,5));
+alert("cssData 0-4:"+cssData.substring(0,4));
 			if(cssData.substring(0,4)=="http"){
 				alert("http");
 				getRemoteData(cssData.substring(0,cssData.length),setupData);
