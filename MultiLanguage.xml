@@ -191,12 +191,11 @@
 	function getTargetLangData(sourceData){
 		if(to(sourceData)){
 			if(boolml && sourceData.indexOf(splitString) != -1){
-				alert("pre_src: " + sourceData);
+				
 				sourceData = getTargetData(sourceData);
 			}
 		}
 
-		alert("src: " + sourceData);
 		return sourceData;
 	}
 
