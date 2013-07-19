@@ -54,12 +54,10 @@
 
 	function getContentData(obj){
 		contentData=getTargetLangData(obj.text);
-		alert("getContentData1: "+contentData);
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
-		alert("getContentData2: "+contentData);
 		replaceData=getTargetLangData(replaceData);
 		doSetup("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
@@ -70,7 +68,6 @@
 	}
 
 	function doProcessData(){
-		alert("pre_changeData: "+contentData);
 		returnHtml += changeData();
 		closeHTML();
 	}
@@ -85,7 +82,6 @@
 				contentData = doReplaceWords();
 			}
 
-			alert("changeData: "+contentData);
 			return contentData;
 		}
 	}
