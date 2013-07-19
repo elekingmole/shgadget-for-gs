@@ -67,6 +67,7 @@
 	}
 
 	function doProcessData(){
+		alert("pre_changeData: "+contentData);
 		returnHtml += changeData();
 		closeHTML();
 	}
@@ -83,8 +84,6 @@
 
 			alert("changeData: "+contentData);
 			return contentData;
-		}else{
-			alert("not changeData: "+contentData);
 		}
 	}
 
