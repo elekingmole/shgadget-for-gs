@@ -53,10 +53,12 @@
 
 	function getCssData(obj){
 		cssData=getTargetLangData(obj.text);
+		alert("getCssData: "+ cssData);
 		setupData();
 	}
 
 	function setupData(){
+		alert("pre setupData: "+ cssData);
 		if(to(cssData)){
 			alert("setupData: cssData: "+ cssData);
 			returnHtml += htmlUnescape(cssData);
