@@ -42,12 +42,22 @@
 
 	function doDisplay(){
 		if(to(cssData)){
-			returnHtml += htmlUnescape(getTargetLangData(cssData));
+			cssData=getTargetLangData(cssData);
+		doFork("remotedata",cssData,getCssData,setupData);
 		}
 		setupData();
 	}
 
+	function getCssData(obj){
+		cssData=getTargetLangData(obj.text);
+		setupData();
+	}
+
 	function setupData(){
+		if(to(cssData)){
+			returnHtml += htmlUnescape(cssData);
+		}
+
 		contentData=getTargetLangData(contentData);
 		doFork("remotedata",contentData,getContentData,setupReplaceData);
 	}
