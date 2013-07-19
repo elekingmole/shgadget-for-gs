@@ -143,6 +143,7 @@
 	}
 
 	function doFork(targetBln,targeData,async,defaultMethod){
+		alert("doFork");
 		if(getBln(targetBln)){
 			if(targeData.substring(0,4)=="http"){
 				alert("http");
