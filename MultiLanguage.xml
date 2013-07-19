@@ -189,7 +189,7 @@
 
 		for(i=0;i<tempContent.length;i++){
 			for(var diff=0;diff<3;diff++){
-				alert("lang: "+(tempContent[i].substring(0+diff,2+diff));
+				alert("lang: "+(tempContent[i].substring(0+diff,2+diff)));
 				if(tempContent[i].substring(0+diff,2+diff) == lang ){
 					returnContent = tempContent[i].substring(2+diff,tempContent[i].length);
 					break;
