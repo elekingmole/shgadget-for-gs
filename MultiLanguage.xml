@@ -154,6 +154,7 @@
 				getRemoteData(targeData.substring(1,targeData.length),async);
 				return;
 			}
+			defaultMethod();
 		}else{
 			alert("def");
 			defaultMethod();
