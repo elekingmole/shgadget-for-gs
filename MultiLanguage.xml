@@ -37,7 +37,7 @@
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
 	var baseURL = "";
-	var boolbu = getBln(""); 
+	var boolbu = getBln("usebaseurl"); 
 	function doDisplay(){
 		setupData();
 	}
