@@ -71,14 +71,12 @@
 				return;
 			}else if(baseURL.length>0){
 				cssData=decodeURI(baseURL+cssData);
-				alert(cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
 		}else{
 			if(baseURL.length>0){
 				cssData=decodeURI(baseURL+"base.css");
-				alert(cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
