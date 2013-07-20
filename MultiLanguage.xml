@@ -59,7 +59,7 @@
 	}
 
 	function setupCssData(){
-		alert("baseURL: "+baseURL);
+		//alert("baseURL: "+baseURL);
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
 
