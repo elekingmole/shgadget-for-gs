@@ -43,11 +43,11 @@
 
 			if(cssData.substring(0,4)=="http"){
 				//alert("http:");
-				getRemoteData(cssData.substring(0,cssData.length),setupData);
+				getRemoteData(cssData.substring(0,cssData.length),getCssData);
 				return;
 			}else if(cssData.substring(1,4)=="htt"){
 				//alert("htt:");
-				getRemoteData(cssData.substring(1,cssData.length),setupData);
+				getRemoteData(cssData.substring(1,cssData.length),getCssData);
 				return;
 			}
 		}
