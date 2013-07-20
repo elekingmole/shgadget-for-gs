@@ -46,12 +46,9 @@
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
-			
-			if(contentData.indexOf("/") != -1){
-				alert(contentData.substring(0,contentData.lastIndexOf("/")+1));
+			if(contentData.indexOf("/") != -1 && contentData.indexOf("http://") != -1){
 				baseURL=contentData.substring(0,contentData.lastIndexOf("/")+1);
 			}
-			
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
@@ -71,6 +68,12 @@
 			}else if(cssData.substring(1,4)=="htt"){
 				getRemoteData(cssData.substring(1,cssData.length),getCssData);
 				return;
+			}else if(baseURL.length>0){
+				cssDatta=baseURl+cssData;
+			}
+		}else{
+			if(baseURL.length>0){
+				cssDatta=baseURl+"base.css"
 			}
 		}
 		setupReplaceData();
