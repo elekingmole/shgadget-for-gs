@@ -42,16 +42,14 @@
 alert("cssData 0-4:"+cssData.substring(0,4) +" cssData 1-4:"+cssData.substring(1,4) +" cssData 2-4:"+cssData.substring(2,4));
 
 			if(cssData.substring(0,4)=="http"){
+				alert("http:");
 				getRemoteData(cssData.substring(0,cssData.length),setupData);
 				return;
 			}else if(targeData.substring(1,4)=="htt"){
+				alert("htt:");
 				getRemoteData(cssData.substring(1,cssData.length),setupData);
 				return;
-			}else if(targeData.substring(2,4)=="ht"){
-				getRemoteData(cssData.substring(2,cssData.length),setupData);
-				return;
 			}
-		
 		}
 		setupData();
 	}
