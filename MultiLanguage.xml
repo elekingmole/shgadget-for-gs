@@ -36,7 +36,7 @@
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
 	var baseURL = "";
-	var boolbu = true;//getBln("useBaseURL"); 
+	var boolbu = getBln("usebaseurl"); 
 	function doDisplay(){
 		setupData();
 	}
@@ -45,10 +45,10 @@
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
-			alert("a");
+			
 			if(contentData.indexOf("/") != -1){
-				alert(contentData.substring(0,contentData.lastIndexOf("/")));
-				baseURL="";//ここで相対パス切り抜き処理
+				alert(contentData.substring(0,contentData.lastIndexOf("/")+1));
+				baseURL=contentData.substring(0,contentData.lastIndexOf("/")+1);
 			}
 			
 		}
@@ -261,7 +261,7 @@
 
 	function init() {
 		initStringValue(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','simplereplace','htmlescape'));
+		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','simplereplace','usebaseurl','htmlescape'));
 		update();
 	}
 
@@ -323,7 +323,7 @@
 
 	function update() {
 		updatePrefs(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','simplereplace','htmlescape'));
+		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotereplacedata','simplereplace','usebaseurl','htmlescape'));
 	}
 </script>
 
@@ -356,6 +356,11 @@
 	<tr>
 		<td>
 			<input type="checkbox" id="simplereplace" onClick="update()">simplereplace
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="usebaseurl" onClick="update()">usebaseurl
 		</td>
 	</tr>
 	<tr>
