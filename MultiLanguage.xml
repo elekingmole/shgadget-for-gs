@@ -45,8 +45,12 @@
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
-			alert(contentData.substring(0,contentData.lastIndexOf("/"));
-			baseURL="";//ここで相対パス切り抜き処理
+			alert("a");
+			if(contentData.indexOf("/") != -1){
+				alert(contentData.substring(0,contentData.lastIndexOf("/"));
+				baseURL="";//ここで相対パス切り抜き処理
+			}
+			
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
