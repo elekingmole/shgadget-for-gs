@@ -138,19 +138,16 @@
 		return contentData;
 	}
 
-	function doGetRemoteData(targetData,async){
-		if(targetData.substring(0,4)=="http"){
-			getRemoteData(targetData.substring(0,targetData.length),async);
-			return;
-		}else if(targetData.substring(1,4)=="htt"){
-			getRemoteData(targetData.substring(1,targetData.length),async);
-			return;
-		}
-	}
 
 	function doFork(targetBln,targetData,async,defaultMethod){
 		if(getBln(targetBln)){
-			doGetRemoteData(targetData,async);
+			if(targetData.substring(0,4)=="http"){
+				getRemoteData(targetData.substring(0,targetData.length),async);
+				return;
+			}else if(targetData.substring(1,4)=="htt"){
+				getRemoteData(targetData.substring(1,targetData.length),async);
+				return;
+			}
 		}
 
 		defaultMethod();
