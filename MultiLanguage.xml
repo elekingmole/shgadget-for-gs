@@ -70,11 +70,11 @@
 				getRemoteData(cssData.substring(1,cssData.length),getCssData);
 				return;
 			}else if(baseURL.length>0){
-				cssData=baseURl+cssData;
+				cssData=baseURL+cssData;
 			}
 		}else{
 			if(baseURL.length>0){
-				cssData=baseURl+"base.css"
+				cssData=baseURL+"base.css"
 			}
 		}
 
