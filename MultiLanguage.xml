@@ -19,6 +19,7 @@
 	<UserPref name="remotereplacedata" datatype="bool" default_value="false" />
 	<UserPref name="simplereplace" datatype="bool" default_value="false" />
 	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
+	<UserPref name="usebaseurl" datatype="bool" default_value="false" />
 	<UserPref name="htmlescape" datatype="bool" default_value="false" />
 
 	<Content type="html"><![CDATA[
@@ -36,7 +37,7 @@
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
 	var baseURL = "";
-	var boolbu = getBln("usebaseurl"); 
+	var boolbu = getBln(""); 
 	function doDisplay(){
 		setupData();
 	}
