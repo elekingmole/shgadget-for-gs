@@ -39,17 +39,7 @@
 	function doDisplay(){
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
-//alert("cssData 0-4:"+cssData.substring(0,4) +" cssData 1-4:"+cssData.substring(1,4) +" cssData 2-4:"+cssData.substring(2,4));
-
-			if(cssData.substring(0,4)=="http"){
-				//alert("http:");
-				getRemoteData(cssData.substring(0,cssData.length),getCssData);
-				return;
-			}else if(cssData.substring(1,4)=="htt"){
-				//alert("htt:");
-				getRemoteData(cssData.substring(1,cssData.length),getCssData);
-				return;
-			}
+			doGetRemoteData(cssData,getCssData);
 		}
 		setupData();
 	}
@@ -141,15 +131,19 @@
 		return contentData;
 	}
 
-	function doFork(targetBln,targeData,async,defaultMethod){
+	function doGetRemoteData(targetData,async){
+		if(targetData.substring(0,4)=="http"){
+			getRemoteData(targetData.substring(0,targetData.length),async);
+			return;
+		}else if(targetData.substring(1,4)=="htt"){
+			getRemoteData(targetData.substring(1,targetData.length),async);
+			return;
+		}
+	}
+
+	function doFork(targetBln,targetData,async,defaultMethod){
 		if(getBln(targetBln)){
-			if(targeData.substring(0,4)=="http"){
-				getRemoteData(targeData.substring(0,targeData.length),async);
-				return;
-			}else if(targeData.substring(1,4)=="htt"){
-				getRemoteData(targeData.substring(1,targeData.length),async);
-				return;
-			}
+			doGetRemoteData(targetData,async);
 		}
 
 		defaultMethod();

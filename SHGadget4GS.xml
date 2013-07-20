@@ -249,13 +249,13 @@
 		return targetlineArray;
 	}
 
-	function doForkEx(targetBlnWord,targeData,async,defaultMethod){
+	function doForkEx(targetBlnWord,targetData,async,defaultMethod){
 		if(getBlnEx(targetBlnWord)){
-			if(targeData.substring(0,4)=="http"){
-				getRemoteData(targeData.substring(0,targeData.length),async);
+			if(targetData.substring(0,4)=="http"){
+				getRemoteData(targetData.substring(0,targetData.length),async);
 				return;
-			}else if(targeData.substring(1,4)=="htt"){
-				getRemoteData(targeData.substring(1,targeData.length),async);
+			}else if(targetData.substring(1,4)=="htt"){
+				getRemoteData(targetData.substring(1,targetData.length),async);
 				return;
 			}
 		}
