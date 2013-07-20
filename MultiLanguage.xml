@@ -70,13 +70,13 @@
 				getRemoteData(cssData.substring(1,cssData.length),getCssData);
 				return;
 			}else if(baseURL.length>0){
-				cssData=baseURL+cssData;
+				cssData=decodeURI(baseURL+cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
 		}else{
 			if(baseURL.length>0){
-				cssData=baseURL+"base.css"
+				cssData=decodeURI(baseURL+"base.css");
 				getRemoteData(cssData,getCssData);
 				return;
 			}
