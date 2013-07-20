@@ -35,8 +35,28 @@
 	var returnHtml="";
 	var boolml = getBln("multilanguage");
 	var boolhe = getBln("htmlescape");
-
+	var baseURL = "";
+	var boolbu = true;//getBln("useBaseURL"); 
 	function doDisplay(){
+		setupData();
+	}
+
+
+	function setupData(){
+		contentData=getTargetLangData(contentData);
+		if(boolbu){
+			alert(contentData.substring(0,contentData.lastIndexOf("/"));
+			baseURL="";//ここで相対パス切り抜き処理
+		}
+		doFork("remotedata",contentData,getContentData,setupCssData);
+	}
+
+	function getContentData(obj){
+		contentData=getTargetLangData(obj.text);
+		setupCssData();
+	}
+
+	function setupCssData(){
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
 
@@ -48,28 +68,18 @@
 				return;
 			}
 		}
-		setupData();
+		setupReplaceData();
 	}
 
 	function getCssData(obj){
 		cssData=getTargetLangData(obj.text);
-		setupData();
-	}
-
-	function setupData(){
-		if(to(cssData)){
-			returnHtml += htmlUnescape(cssData);
-		}
-		contentData=getTargetLangData(contentData);
-		doFork("remotedata",contentData,getContentData,setupReplaceData);
-	}
-
-	function getContentData(obj){
-		contentData=getTargetLangData(obj.text);
 		setupReplaceData();
 	}
 
 	function setupReplaceData(){
+		if(to(cssData)){
+			returnHtml += htmlUnescape(cssData);
+		}
 		replaceData=getTargetLangData(replaceData);
 		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);
 	}
@@ -172,7 +182,7 @@
 
 	function closeHTML(){
 
-		if(!(getBln("htmlescape"))){
+		if(!boolhe){
 			returnHtml = gadgets.util.unescapeString(returnHtml);
 		}
 
