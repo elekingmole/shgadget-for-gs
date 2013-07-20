@@ -39,14 +39,14 @@
 	function doDisplay(){
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
-alert("cssData 0-4:"+cssData.substring(0,4) +" cssData 1-4:"+cssData.substring(1,4) +" cssData 2-4:"+cssData.substring(2,4));
+//alert("cssData 0-4:"+cssData.substring(0,4) +" cssData 1-4:"+cssData.substring(1,4) +" cssData 2-4:"+cssData.substring(2,4));
 
 			if(cssData.substring(0,4)=="http"){
-				alert("http:");
+				//alert("http:");
 				getRemoteData(cssData.substring(0,cssData.length),setupData);
 				return;
-			}else if(targeData.substring(1,4)=="htt"){
-				alert("htt:");
+			}else if(cssData.substring(1,4)=="htt"){
+				//alert("htt:");
 				getRemoteData(cssData.substring(1,cssData.length),setupData);
 				return;
 			}
