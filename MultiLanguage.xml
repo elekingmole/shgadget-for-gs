@@ -43,10 +43,23 @@
 		setupData();
 	}
 
+	function extractURL(sourceData){
+		var returnURL="";
+		if(sourceData.indexOf("http://") != -1){
+			returnURL="http://"+sourceData.split("http://")[1];
+		}else if(sourceData.indexOf("https://") != -1 ){
+			returnURL="https://"+sourceData.split("https://")[1];
+		}
+
+		return returnURL;
+	}
+
 
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
+			alert(extractURL(contentData));
+
 			if(contentData.indexOf("http://") != -1 || contentData.indexOf("https://") != -1 ){
 				baseURL=contentData.substring(0,contentData.lastIndexOf("/")+1).trim();
 				baseFilename=contentData.substring(contentData.lastIndexOf("/")+1,contentData.length).trim();
