@@ -58,7 +58,7 @@
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
-			alert(extractURL(contentData));
+			alert("ectract: "+extractURL(contentData));
 
 			if(contentData.indexOf("http://") != -1 || contentData.indexOf("https://") != -1 ){
 				baseURL=contentData.substring(0,contentData.lastIndexOf("/")+1).trim();
