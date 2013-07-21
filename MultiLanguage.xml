@@ -64,6 +64,7 @@
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
 			}
+			alert(location.href);
 			alert("baseURL: " + baseURL +" /baseFilename: " + baseFilename);
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
