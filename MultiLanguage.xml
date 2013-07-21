@@ -51,23 +51,20 @@
 			returnURL="https://"+sourceData.split("https://")[1];
 		}
 
-		return returnURL;
+		return returnURL.trim();
 	}
 
 
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
-			alert("ectract: "+extractURL(contentData));
-
-			if(contentData.indexOf("http://") != -1 || contentData.indexOf("https://") != -1 ){
-				baseURL=contentData.substring(0,contentData.lastIndexOf("/")+1).trim();
-				baseFilename=contentData.substring(contentData.lastIndexOf("/")+1,contentData.length).trim();
-				if(baseFilename.indexOf(".") != -1){
-					baseFilename = baseFilename.split(".")[0];
-				}
-				alert("baseFilename: " + baseFilename);
+			var fullURL = extractURL(contentData);
+			baseURL=fullURL.substring(0,fullURL.lastIndexOf("/")+1).trim();
+			baseFilename=fullURL.substring(fullURL.lastIndexOf("/")+1,fullURL.length).trim();
+			if(baseFilename.indexOf(".") != -1){
+				baseFilename = baseFilename.split(".")[0];
 			}
+			alert("baseURL: " + baseURL +" /baseFilename: " + baseFilename);
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
