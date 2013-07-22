@@ -44,7 +44,7 @@
 	}
 
 	function extractURL(sourceData){
-		var temp = sourceData.match(/(^https?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\/)(.+)/);
+		var temp = sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
 		alert("temp[0]: "+temp[0]+"\ntemp[1]: "+temp[1]+"\ntemp[2]: "+temp[2]);
 
 		return sourceData.match(/(^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\/)(.+)/)[0];
