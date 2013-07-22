@@ -59,7 +59,7 @@
 			}
 
 			var temp = location.href;
-			temp = temp.split("&parent=")[1].split("#")[0];
+			temp = decodeURI(temp.split("&parent=")[1].split("#")[0]);
 			alert("temp: " + temp);
 			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);
 		}
