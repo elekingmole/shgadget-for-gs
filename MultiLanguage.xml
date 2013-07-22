@@ -86,7 +86,7 @@
 				}
 
 				alert("2: " + cssData);
-				getRemoteData(extractURL(cssData),getCssData);
+				getRemoteData(cssData,getCssData);
 				return;
 			}
 		}else{
