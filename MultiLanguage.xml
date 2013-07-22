@@ -44,20 +44,16 @@
 	}
 
 	function extractURL(sourceData){
-		var temp = sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
-		alert("temp[0]: "+temp[0]+"\ntemp[1]: "+temp[1]+"\ntemp[2]: "+temp[2]);
-
-		return sourceData.match(/(^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\/)(.+)/)[0];
-		//return sourceData.match(/^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\//)[0];
+		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
 	}
 
 
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 		if(boolbu){
-			var fullURL = extractURL(contentData);
-			baseURL=fullURL.substring(0,fullURL.lastIndexOf("/")+1).trim();
-			baseFilename=fullURL.substring(fullURL.lastIndexOf("/")+1,fullURL.length).trim();
+			var targetUrl=extractURL(contentData);
+			baseURL=targetUrl[1];
+			baseFilename=targetUrl[1];;
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
 			}
