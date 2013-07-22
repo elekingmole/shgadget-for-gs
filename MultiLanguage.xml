@@ -47,14 +47,14 @@
 		var returnURL="";
 		//fileまで alert("match: "+sourceData.match(/^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+).+/));
 
-		alert("match: "+sourceData.match(/^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\//));
+		/*alert("match: "+sourceData.match(/^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\//));
 		if(sourceData.indexOf("http://") != -1){
 			returnURL="http://"+sourceData.split("http://")[1];
 		}else if(sourceData.indexOf("https://") != -1 ){
 			returnURL="https://"+sourceData.split("https://")[1];
-		}
+		}*/
 
-		return returnURL.trim();
+		return sourceData.match(/^https?(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)\//);
 	}
 
 
