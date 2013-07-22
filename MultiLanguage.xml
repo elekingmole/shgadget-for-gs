@@ -79,21 +79,21 @@
 	function setupCssData(){
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
-			alert("0: " + cssData);
+			//alert("0: " + cssData);
 			if(boolrc){
 				if(boolbu){
 					cssData=decodeURI(baseURL+cssData);
-					alert("1: " + cssData);
+					//alert("1: " + cssData);
 				}
 
-				alert("2: " + cssData);
+				//alert("2: " + cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
 		}else{
 			if(boolrc && boolbu){
 				cssData=decodeURI(baseURL+"def.css");
-				alert("3: " + cssData);
+				//alert("3: " + cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
