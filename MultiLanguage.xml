@@ -59,7 +59,7 @@
 			}
 
 			var temp = location.href;
-			temp = temp.split("&parent=")[1].split("#")[0].match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
+			temp = temp.split("&parent=")[1].split("#")[0].match(/^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/);
 			alert("temp: " + decodeURI(temp));
 			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);
 		}
