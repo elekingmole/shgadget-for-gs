@@ -58,7 +58,7 @@
 				baseFilename = baseFilename.split(".")[0];
 			}
 
-			var temp = location.href;
+			var temp = location.href.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
 			temp = temp.split("&parent=")[1].split("#")[0];
 			alert("temp: " + decodeURI(temp));
 			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);
