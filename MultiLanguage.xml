@@ -59,8 +59,8 @@
 			}
 
 			var temp = location.href;
-			temp = decodeURI(temp.split("&parent=")[1].split("#")[0]);
-			alert("temp: " + temp);
+			temp = temp.split("&parent=")[1].split("#")[0];
+			alert("temp: " + decodeURI(temp));
 			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
