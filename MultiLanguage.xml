@@ -38,6 +38,7 @@
 	var boolhe = getBln("htmlescape");
 	var baseURL = "";
 	var baseFilename="";
+	var gadgetURL="";
 	var boolbu = getBln("usebaseurl"); 
 	function doDisplay(){
 		setupData();
@@ -58,9 +59,8 @@
 				baseFilename = baseFilename.split(".")[0];
 			}
 
-			var temp = location.href;
-			temp = temp.split("&parent=")[1].split("#")[0].match(/^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+/);
-			alert("temp: " + decodeURI(temp));
+			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+/);
+			alert("gadgetURL: " + decodeURI(gadgetURL));
 			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
