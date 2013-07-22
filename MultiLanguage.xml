@@ -53,12 +53,15 @@
 		if(boolbu){
 			var targetUrl=extractURL(contentData);
 			baseURL=targetUrl[1];
-			baseFilename=targetUrl[1];;
+			baseFilename=targetUrl[2];
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
 			}
-			alert(location.href);
-			alert("baseURL: " + baseURL +" /baseFilename: " + baseFilename);
+
+			var temp = location.href;
+			temp = temp.split("&parent=")[1].split["#"];
+			alert("temp: " + temp);
+			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
