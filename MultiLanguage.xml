@@ -78,21 +78,17 @@
 	function setupCssData(){
 		if(to(cssData)){
 			cssData=getTargetLangData(cssData);
-			//alert("0: " + cssData);
 			if(boolrc){
 				if(boolbu){
 					cssData=decodeURI(baseURL+cssData);
-					//alert("1: " + cssData);
 				}
 
-				//alert("2: " + cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
 		}else{
 			if(boolrc && boolbu){
 				cssData=decodeURI(baseURL+"def.css");
-				//alert("3: " + cssData);
 				getRemoteData(cssData,getCssData);
 				return;
 			}
@@ -125,7 +121,6 @@
 		}else{
 			if(boolrd && boolbu){
 				replaceData=decodeURI(baseURL+"def.rpw");
-				//alert("3: " + cssData);
 				getRemoteData(replaceData,getReplaceData);
 				return;
 			}
@@ -133,8 +128,6 @@
 
 		doProcessData();
 
-		/*replaceData=getTargetLangData(replaceData);
-		doFork("remotereplacedata",replaceData,getReplaceData,doProcessData);*/
 	}
 
 	function getReplaceData(obj){
@@ -161,7 +154,7 @@
 				contendData = doExpandURL();
 			}
 
-			return contentData;
+			return contentData.replace(/\n/g,'<br>');;
 		}
 	}
 
@@ -205,6 +198,38 @@
 		return contentData;
 	}
 
+	function addAnchor(){
+		var result = contentData.match(/%#(L\w+)#%/g);
+		var extention="";
+		var expandedURL="";
+		if(result != null){
+			for(var i = 0;i<result.length;i++){
+				expandedURL=result[i].replace(/#/g,'').replace(/%/g,'');
+			
+				switch(expandedURL.substring(0,1)){
+					case 'P':
+						extention='png';
+						break;
+					case 'J':
+						extention='jpg';
+						break;
+					case 'G':
+						extention='gif';
+						break;
+
+					default:
+						extention='error';
+						break;
+				}
+
+				expandedURL="<img src='"+gadgetURL+"/"+expandedURL.substring(1)+"."+extention+"'>";
+
+				contentData=contentData.replace(result[i],expandedURL);
+			
+			}	
+		}
+	}
+
 	function doExpandURL(){
 
 		var result = contentData.match(/%#((P|J|G)\w+)#%/g);
@@ -224,52 +249,18 @@
 					case 'G':
 						extention='gif';
 						break;
+
 					default:
 						extention='error';
 						break;
 				}
 
-				//<img src="
-
-
 				expandedURL="<img src='"+gadgetURL+"/"+expandedURL.substring(1)+"."+extention+"'>";
 
 				contentData=contentData.replace(result[i],expandedURL);
-				/*alert(result[i]);
-				alert(result[i].substring(1)+"."+extention);*/
 			
 			}	
 		}
-
-		//regexp %#---#%でmatchさせて、それをbaseURL + nnn +"."+ extentionと＜img＞に置き換え
-
-		/*var str = "%#P100#%は%#J89#%で%#G4#%です。";
-		var result = str.match(/%#((P|J|G)\d+)#%/g);
-		var extention="";
-		if(result != null){
-			for(var i = 0;i<result.length;i++){
-				result[i]=result[i].replace(/#/g,'').replace(/%/g,'');
-			
-				switch(result[i].substring(0,1)){
-					case 'P':
-						extention='png';
-						break;
-					case 'J':
-						extention='jpg';
-						break;
-					case 'G':
-						extention='gif';
-						break;
-					default:
-						alert(result[i].substring(0,1));
-						result[i]='error';
-						break;
-				}
-				alert(result[i]);
-				alert(result[i].substring(1)+"."+extention);
-			
-			}	
-		}*/
 
 	}
 
