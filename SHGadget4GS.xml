@@ -274,12 +274,14 @@
 	function closeHTML(){
 		returnHtml+="</pre>";
 		document.getElementById('content_div').innerHTML += returnHtml;
-		SyntaxHighlighter.autoloader('__UP_languagelower__                   __UP_baseurljs__/shBrush__UP_language__.js');
-		SyntaxHighlighter.all();
+		SyntaxHighlighter.autoloader('__UP_languagelower__ __UP_baseurljs__/shBrush__UP_language__.js');
+		
 
 		if(getBlnEx("H")){
 			gadgets.window.adjustHeight();
 		}
+
+		SyntaxHighlighter.all();
 	}
 
 	function htmlUnescape(str){
