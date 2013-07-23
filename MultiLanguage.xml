@@ -229,7 +229,7 @@
 						break;
 				}
 
-				expandedURL=baseURL+expandedURL+"."+extention;
+				expandedURL=gadgetURL+expandedURL+"."+extention;
 
 				contentData=contentData.replace(result[i],expandedURL);
 				/*alert(result[i]);
