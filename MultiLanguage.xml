@@ -13,7 +13,7 @@
 
 	<UserPref name="replaceSpecifier" datatype="string" default_value="%--%" />
 	<UserPref name="replaceWords" datatype="string" />
-
+	<UserPref name="autoexpand" datatype="bool" default_value="false" />
 	<UserPref name="multilanguage" datatype="bool" default_value="false" />
 	<UserPref name="remotedata" datatype="bool" default_value="false" />
 	<UserPref name="remotecss" datatype="bool" default_value="false" />
@@ -65,8 +65,7 @@
 			}
 
 			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+/);
-			/*alert("gadgetURL: " + decodeURI(gadgetURL));
-			alert("baseURL: " + baseURL +"\n baseFilename: " + baseFilename);*/
+
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
@@ -158,6 +157,10 @@
 				contentData = doReplaceWords();
 			}
 
+			if(getBln('autoexpand')){
+				contendData = doExpandURL();
+			}
+
 			return contentData;
 		}
 	}
@@ -200,6 +203,38 @@
 		}
 
 		return contentData;
+	}
+
+	function doExpandURL(){
+
+		/*var str = "%#P100#%は%#J89#%で%#G4#%です。";
+		var result = str.match(/%#((P|J|G)\d+)#%/g);
+		var extention="";
+		if(result != null){
+			for(var i = 0;i<result.length;i++){
+				result[i]=result[i].replace(/#/g,'').replace(/%/g,'');
+			
+				switch(result[i].substring(0,1)){
+					case 'P':
+						extention='png';
+						break;
+					case 'J':
+						extention='jpg';
+						break;
+					case 'G':
+						extention='gif';
+						break;
+					default:
+						alert(result[i].substring(0,1));
+						result[i]='error';
+						break;
+				}
+				alert(result[i]);
+				alert(result[i].substring(1)+"."+extention);
+			
+			}	
+		}*/
+
 	}
 
 
@@ -311,7 +346,7 @@
 
 	function init() {
 		initStringValue(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape'));
+		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape','autoexpand'));
 		update();
 	}
 
@@ -373,7 +408,7 @@
 
 	function update() {
 		updatePrefs(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape'));
+		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape','autoexpand'));
 	}
 </script>
 
@@ -416,6 +451,11 @@
 	<tr>
 		<td>
 			<input type="checkbox" id="usebaseurl" onClick="update()">usebaseurl
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="autoexpand" onClick="update()">autoexpand
 		</td>
 	</tr>
 	<tr>
