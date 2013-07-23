@@ -168,7 +168,7 @@
 	function doReplaceWords(){
 		var specifier =  "__UP_replaceSpecifier__";
 		var tempWords = "";
-		var replaceWords = "";
+		var replaceWords = "";//new array?
 		var tempTargetWord;
 		var tempReplaceWord;
 		var prefix=specifier.substring(0,specifier.length/2);
@@ -181,7 +181,7 @@
 			if(tempWords[1].length>0){
 				if(tempWords[1].indexOf(specifier) != -1){
 					replaceWords = tempWords[1].split(specifier);
-				}else{
+				}else{//ここPush？
 					replaceWords = tempWords[1];
 				}
 
@@ -206,6 +206,39 @@
 	}
 
 	function doExpandURL(){
+
+		var result = contentData.match(/%#((P|J|G)\d+)#%/g);
+		var extention="";
+		var expandedURL="";
+		if(result != null){
+			for(var i = 0;i<result.length;i++){
+				expandedURL=result[i].replace(/#/g,'').replace(/%/g,'');
+			
+				switch(expandedURL.substring(0,1)){
+					case 'P':
+						extention='png';
+						break;
+					case 'J':
+						extention='jpg';
+						break;
+					case 'G':
+						extention='gif';
+						break;
+					default:
+						extention='error';
+						break;
+				}
+
+				expandedURL=baseURL+expandedURL+"."+extention;
+
+				contentData=contentData.replace(result[i],expandedURL);
+				/*alert(result[i]);
+				alert(result[i].substring(1)+"."+extention);*/
+			
+			}	
+		}
+
+		//regexp %#---#%でmatchさせて、それをbaseURL + nnn +"."+ extentionと＜img＞に置き換え
 
 		/*var str = "%#P100#%は%#J89#%で%#G4#%です。";
 		var result = str.match(/%#((P|J|G)\d+)#%/g);
