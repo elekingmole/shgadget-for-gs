@@ -207,7 +207,7 @@
 
 	function doExpandURL(){
 
-		var result = contentData.match(/%#((P|J|G)\d+)#%/g);
+		var result = contentData.match(/%#((P|J|G)\B+\d+)#%/g);
 		var extention="";
 		var expandedURL="";
 		if(result != null){
