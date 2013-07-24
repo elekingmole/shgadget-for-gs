@@ -204,11 +204,11 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/{(L\w+)}/g);
+		var result = contentData.match(/{((L|l)\w+)}/g);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
-		alert("result: " + result);
+
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
 
