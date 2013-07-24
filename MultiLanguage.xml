@@ -275,7 +275,7 @@ alert("expandedURL: "+expandedURL);
 alert("targetURL: "+targetURL);
 alert("targetURL: "+targetURL);
 				if(boolAnchor){
-					targetURL = "<a href='" + expandedURL +"'>"+ expandedURL + "</a>";
+					targetURL = "<a href='" + expandedURL +"' target='_blank' >"+ targetURL + "</a>";
 				}
 alert("targetURL:after "+targetURL);
 				contentData=contentData.replace(result[i],targetURL);
