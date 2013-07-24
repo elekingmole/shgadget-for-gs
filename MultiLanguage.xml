@@ -271,13 +271,12 @@
 
 				expandedURL=gadgetURL+"/"+expandedURL.substring(1)+"."+extention;
 				targetURL="<img src='"+expandedURL+"'>";
-alert("expandedURL: "+expandedURL);
-alert("targetURL: "+targetURL);
-alert("targetURL: "+targetURL);
+
 				if(boolAnchor){
 					targetURL = "<a href='" + expandedURL +"' target='_blank' >"+ targetURL + "</a>";
+
 				}
-alert("targetURL:after "+targetURL);
+				boolAnchor=false;
 				contentData=contentData.replace(result[i],targetURL);
 
 			}	
