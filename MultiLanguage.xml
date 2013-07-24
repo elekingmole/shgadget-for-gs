@@ -204,7 +204,7 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/(Lhttps?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/g);
+		var result = contentData.match(/\{(Lhttps?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)\}/g);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
