@@ -153,7 +153,7 @@
 			if(getBln('autoexpand')){
 				contendData = doExpandURL();
 			}
-
+//\n to <br>を追加する
 			return contentData.replace(/\n/g,'<br>');;
 		}
 	}
@@ -232,9 +232,12 @@
 
 	function doExpandURL(){
 
-		var result = contentData.match(/%#((P|J|G)\w+)#%/g);
+		var result = contentData.match(/%#((P|p|J|j|G|g)\w+)#%/g);
 		var extention="";
 		var expandedURL="";
+		var boolAnchor=false;
+		var targetURL="";
+
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
 				expandedURL=result[i].replace(/#/g,'').replace(/%/g,'');
@@ -242,23 +245,39 @@
 				switch(expandedURL.substring(0,1)){
 					case 'P':
 						extention='png';
+						boolAnchor=true;
 						break;
 					case 'J':
 						extention='jpg';
+						boolAnchor=true;
 						break;
 					case 'G':
 						extention='gif';
+						boolAnchor=true;
 						break;
-
+					case 'p':
+						extention='png';
+						break;
+					case 'j':
+						extention='jpg';
+						break;
+					case 'g':
+						extention='gif';
+						break;
 					default:
 						extention='error';
 						break;
 				}
 
-				expandedURL="<img src='"+gadgetURL+"/"+expandedURL.substring(1)+"."+extention+"'>";
+				expandedURL=gadgetURL+"/"+expandedURL.substring(1)+"."+extention;
+				targetURL="<img src='"+expandedURL+"'>";
 
-				contentData=contentData.replace(result[i],expandedURL);
-			
+				if(boolAnchor){
+					targetURL = "<a href='" +"'>"+ expandedURL + "</a>";
+				}
+
+				contentData=contentData.replace(result[i],targetURL);
+
 			}	
 		}
 
