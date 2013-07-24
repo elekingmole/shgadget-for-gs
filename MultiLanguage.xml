@@ -204,7 +204,7 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/{((L|l)\w+)}/g);
+		var result = contentData.match(/\{((L|l)\w+)\}/g);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
@@ -233,7 +233,7 @@
 
 	function doExpandURL(){
 
-		var result = contentData.match(/{((P|p|J|j|G|g)\w+)}/g);
+		var result = contentData.match(/\{((P|p|J|j|G|g)\w+)\}/g);
 		var extention="";
 		var expandedURL="";
 		var boolAnchor=false;
