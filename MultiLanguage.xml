@@ -156,7 +156,7 @@
 
 			//addAnchor
 
-			addAnchor();
+			contentData = addAnchor();
 
 //\n to <br>を追加する
 			return contentData.replace(/\n/g,'<br>');;
@@ -208,6 +208,7 @@
 		var extention="";
 		var targetURL="";
 		var anchorText="";
+		alert("result: " + result);
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
 
