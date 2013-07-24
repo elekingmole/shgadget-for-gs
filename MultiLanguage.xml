@@ -234,7 +234,7 @@
 
 	function doExpandURL(){
 
-		var result = contentData.match(/\{^((P|p|J|j|G|g)\w+)^\}/g);
+		var result = contentData.match(/\{\^((P|p|J|j|G|g)\w+)\^\}/g);
 		var extention="";
 		var expandedURL="";
 		var boolAnchor=false;
@@ -242,7 +242,7 @@
 
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-				expandedURL=result[i].replace(/{^/g,'').replace(/^}/g,'');
+				expandedURL=result[i].replace(/\{\^/g,'').replace(/\^\}/g,'');
 			
 				switch(expandedURL.substring(0,1)){
 					case 'P':
