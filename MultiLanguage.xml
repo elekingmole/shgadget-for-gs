@@ -204,7 +204,7 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/\{((L|l)\w+)\}/g);
+		var result = contentData.match(/\{((L|l)https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/(.+))\}/g);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
@@ -221,7 +221,7 @@
 					anchorText=targetURL;
 				}
 
-				//.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
+				//.match(/(https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
 				
 				targetURL="<a href='"+targetURL+"'>"+ anchorText + "</a>";
 
