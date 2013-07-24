@@ -199,32 +199,27 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/%#(L\w+)#%/g);
+		var result = contentData.match(/{(L\w+)}/g);
 		var extention="";
-		var expandedURL="";
+		var targetURL="";
+		var anchorText="";
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-				expandedURL=result[i].replace(/#/g,'').replace(/%/g,'');
-			
-				switch(expandedURL.substring(0,1)){
-					case 'P':
-						extention='png';
-						break;
-					case 'J':
-						extention='jpg';
-						break;
-					case 'G':
-						extention='gif';
-						break;
 
-					default:
-						extention='error';
-						break;
+				expandedURL=result[i].replace(/{/g,'').replace(/}/g,'');
+
+				if(result[i].indexOf("|") != -1){
+					anchorText=result[i].split("|")[1]
+				}else{
+
 				}
+
+				
+				
 
 				expandedURL="<img src='"+gadgetURL+"/"+expandedURL.substring(1)+"."+extention+"'>";
 
-				contentData=contentData.replace(result[i],expandedURL);
+				contentData=contentData.replace(result[i],targetURL);
 			
 			}	
 		}
@@ -232,7 +227,7 @@
 
 	function doExpandURL(){
 
-		var result = contentData.match(/%#((P|p|J|j|G|g)\w+)#%/g);
+		var result = contentData.match(/{((P|p|J|j|G|g)\w+)}/g);
 		var extention="";
 		var expandedURL="";
 		var boolAnchor=false;
@@ -240,7 +235,7 @@
 
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-				expandedURL=result[i].replace(/#/g,'').replace(/%/g,'');
+				expandedURL=result[i].replace(/{/g,'').replace(/}/g,'');
 			
 				switch(expandedURL.substring(0,1)){
 					case 'P':
@@ -274,7 +269,6 @@
 
 				if(boolAnchor){
 					targetURL = "<a href='" + expandedURL +"' target='_blank' >"+ targetURL + "</a>";
-
 				}
 				boolAnchor=false;
 				contentData=contentData.replace(result[i],targetURL);
