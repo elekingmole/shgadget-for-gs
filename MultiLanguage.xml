@@ -204,7 +204,7 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/(Lhttps?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/g);
+		var result = contentData.match(/\^\{(Lhttps?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)\}\^/g);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
@@ -212,7 +212,7 @@
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
 
-				targetURL=result[i].replace(/{/g,'').replace(/}/g,'');
+				targetURL=result[i].replace(/\^\{/g,'').replace(/\}\^/g,'');
 
 				if(result[i].indexOf("|") != -1){
 					targetURL=result[i].split("|")[0];
@@ -234,7 +234,7 @@
 
 	function doExpandURL(){
 
-		var result = contentData.match(/\{((P|p|J|j|G|g)\w+)\}/g);
+		var result = contentData.match(/\{^((P|p|J|j|G|g)\w+)^\}/g);
 		var extention="";
 		var expandedURL="";
 		var boolAnchor=false;
@@ -242,7 +242,7 @@
 
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-				expandedURL=result[i].replace(/{/g,'').replace(/}/g,'');
+				expandedURL=result[i].replace(/{^/g,'').replace(/^}/g,'');
 			
 				switch(expandedURL.substring(0,1)){
 					case 'P':
