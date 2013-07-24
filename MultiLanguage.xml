@@ -208,13 +208,13 @@
 		var extention="";
 		var targetURL="";
 		var anchorText="";
-		alert("1: "+ targetURL);
-		alert(result);
+		//alert("1: "+ targetURL);
+		//alert(result);
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
 
-				targetURL=result[i].replace(/\^\{/g,'').replace(/\}\^/g,'');
-				alert("2: "+ targetURL);
+				
+				//alert("2: "+ targetURL);
 				if(result[i].indexOf("|") != -1){
 					targetURL=result[i].split("|")[0];
 					anchorText=result[i].split("|")[1];
@@ -225,7 +225,7 @@
 				//.match(/(https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
 				
 				targetURL="<a href='"+targetURL+"'>"+ anchorText + "</a>";
-				alert("3: "+ targetURL);
+				targetURL=targetURL.replace(/\^\{/g,'').replace(/\}\^/g,'');
 				contentData=contentData.replace(result[i],targetURL);
 			
 			}	
