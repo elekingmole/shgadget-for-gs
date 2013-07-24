@@ -153,6 +153,11 @@
 			if(getBln('autoexpand')){
 				contendData = doExpandURL();
 			}
+
+			//addAnchor
+
+			addAnchor();
+
 //\n to <br>を追加する
 			return contentData.replace(/\n/g,'<br>');;
 		}
@@ -206,18 +211,18 @@
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
 
-				expandedURL=result[i].replace(/{/g,'').replace(/}/g,'');
+				targetURL=result[i].replace(/{/g,'').replace(/}/g,'');
 
 				if(result[i].indexOf("|") != -1){
-					anchorText=result[i].split("|")[1]
+					targetURL=result[i].split("|")[0];
+					anchorText=result[i].split("|")[1];
 				}else{
-
+					anchorText=targetURL;
 				}
 
+				//.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
 				
-				
-
-				expandedURL="<img src='"+gadgetURL+"/"+expandedURL.substring(1)+"."+extention+"'>";
+				targetURL="<a href='"+targetURL+"'>"+ anchorText + "</a>";
 
 				contentData=contentData.replace(result[i],targetURL);
 			
