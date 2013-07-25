@@ -525,7 +525,7 @@
 	</tr>
 	<tr>
 		<td>
-			<input type="checkbox" id="autoanchor" onClick="update()">bsntobr
+			<input type="checkbox" id="autoanchor" onClick="update()">autoanchor
 		</td>
 	</tr>
 	<tr>
