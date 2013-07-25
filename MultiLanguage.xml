@@ -75,25 +75,7 @@
 	}
 
 	function setupCssData(){
-		if(to(cssData)){
-			cssData=getTargetLangData(cssData);
-			if(boolrc){
-				if(boolbu){
-					cssData=decodeURI(baseURL+cssData);
-				}
-
-				getRemoteData(cssData,getCssData);
-				return;
-			}
-		}else{
-			if(boolrc && boolbu){
-				cssData=decodeURI(baseURL+"def.css");
-				getRemoteData(cssData,getCssData);
-				return;
-			}
-		}
-
-		setupReplaceData();
+		doForkEx(cssData,boolrc,"def.css",getCssData,setupReplaceData);
 	}
 
 	function getCssData(obj){
@@ -101,31 +83,36 @@
 		setupReplaceData();
 	}
 
+	function doForkEx(targetData,targetBool,targetFilename,async,defaultMethod){
+		
+		if(to(targetData)){
+			targetData=getTargetLangData(targetData);
+			if(targetBool){
+				if(boolbu){
+					targetData=decodeURI(baseURL+targetData);
+				}
+				getRemoteData(targetData,async);
+				return;
+			}
+
+		}else{
+			if(targetBool && boolbu){
+				targetData=decodeURI(baseURL+targetFilename);
+				getRemoteData(targetData,async);
+				return;
+			}
+		}
+
+		defaultMethod();
+		return;
+	}
+
 	function setupReplaceData(){
 		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
 		}
 
-		if(to(replaceData)){
-			replaceData=getTargetLangData(replaceData);
-			if(boolrd){
-				if(boolbu){
-					replaceData=decodeURI(baseURL+replaceData);
-				}
-				getRemoteData(replaceData,getReplaceData);
-				return;
-			}
-
-
-		}else{
-			if(boolrd && boolbu){
-				replaceData=decodeURI(baseURL+"def.rpw");
-				getRemoteData(replaceData,getReplaceData);
-				return;
-			}
-		}
-
-		doProcessData();
+		doForkEx(replaceData,boolrd,"def.rpw",getReplaceData,doProcessData);
 
 	}
 
@@ -305,21 +292,6 @@
 		defaultMethod();
 		return;
 	}
-
-	/*function doFork(targetBln,targetData,async,defaultMethod){
-		if(getBln(targetBln)){
-			if(targetData.substring(0,4)=="http"){
-				getRemoteData(targetData.substring(0,targetData.length),async);
-				return;
-			}else if(targetData.substring(1,4)=="htt"){
-				getRemoteData(targetData.substring(1,targetData.length),async);
-				return;
-			}
-		}
-
-		defaultMethod();
-		return;
-	}*/
 
 	function to(object){
 		if(!(typeof object === "undefined") && object.length>0){
