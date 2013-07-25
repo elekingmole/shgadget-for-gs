@@ -37,21 +37,18 @@
 	var lang = getLang();
 	var prefs=new gadgets.Prefs();
 	var returnHtml="";
-	var boolml = getBln("multilanguage");
-	var boolhe = getBln("htmlescape");
+
 	var baseURL = "";
 	var baseFilename="";
 	var gadgetURL="";
-	var boolbu = getBln("usebaseurl"); 
+
 	var boolrc = getBln("remotecss");
 	var boolrd = getBln("remotereplacedata");
+	var boolbu = getBln("usebaseurl"); 
+
 
 	function doDisplay(){
 		setupData();
-	}
-
-	function extractURL(sourceData){
-		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
 	}
 
 	function setupData(){
@@ -296,6 +293,9 @@
 		return contentData;
 	}
 
+	function extractURL(sourceData){
+		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
+	}
 
 	function doFork(targetBln,targetData,async,defaultMethod){
 		if(getBln(targetBln)){
@@ -330,7 +330,7 @@
 
 	function closeHTML(){
 
-		if(!boolhe){
+		if(!(getBln("htmlescape"))){
 			returnHtml = gadgets.util.unescapeString(returnHtml);
 		}
 
@@ -355,7 +355,7 @@
 
 	function getTargetLangData(sourceData){
 		if(to(sourceData)){
-			if(boolml && sourceData.indexOf(splitString) != -1){
+			if(getBln("multilanguage") && sourceData.indexOf(splitString) != -1){
 				sourceData = getTargetData(sourceData);
 			}
 		}
