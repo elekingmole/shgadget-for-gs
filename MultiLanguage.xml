@@ -62,7 +62,7 @@
 			baseURL=targetUrl[1];
 			baseFilename=targetUrl[2];
 
-			//alert("baseURL:\n" + baseURL + "\n\nbaseFilename:\n" + baseFilename);
+			alert("baseURL:\n" + baseURL + "\n\nbaseFilename:\n" + baseFilename);
 
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
@@ -70,7 +70,7 @@
 
 			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
 
-			//alert("gadgetURL:\n" + gadgetURL);
+			alert("gadgetURL:\n" + gadgetURL);
 
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
