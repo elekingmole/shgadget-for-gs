@@ -49,7 +49,7 @@
 	}
 
 	function extractURL(sourceData){
-		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
+		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/?);
 	}
 
 	function setupData(){
@@ -212,14 +212,14 @@
 		//alert(result);
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-				alert(result[i]);
+				//alert(result[i]);
 				
 				//alert("2: "+ targetURL);
 				if(result[i].indexOf("|") != -1){
 					targetURL=result[i].split("|")[0];
 					anchorText=result[i].split("|")[1];
 				}else{
-					anchorText=targetURL;
+					anchorText=targetURL=result[i];
 				}
 
 				//.match(/(https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
