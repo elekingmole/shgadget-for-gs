@@ -225,7 +225,7 @@
 				//.match(/(https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
 				
 				targetURL="<a href='"+targetURL+"'>"+ anchorText + "</a>";
-				targetURL=targetURL.replace(/\^\{/g,'').replace(/\}\^/g,'');
+				targetURL=targetURL.replace(/\^\{l/gi,'').replace(/\}\^/g,'');
 				contentData=contentData.replace(result[i],targetURL);
 			
 			}	
