@@ -160,7 +160,7 @@
 				contendData = doExpandURL();
 			}
 			
-			if(getBln('autoAnchor')){
+			if(getBln('autoanchor')){
 				contentData = addAnchor();
 			}
 			
@@ -168,7 +168,6 @@
 				contentData = contentData.replace(/\n/g,'<br>');
 			}
 
-//\n to <br>を追加する
 			return contentData;
 		}
 	}
