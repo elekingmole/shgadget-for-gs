@@ -64,7 +64,7 @@
 				baseFilename = baseFilename.split(".")[0];
 			}
 
-			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(^https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
+			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
 
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
