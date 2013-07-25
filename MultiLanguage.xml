@@ -14,13 +14,13 @@
 	<UserPref name="replaceSpecifier" datatype="string" default_value="%--%" />
 	<UserPref name="replaceWords" datatype="string" />
 	<UserPref name="autoexpand" datatype="bool" default_value="false" />
-	<UserPref name="multilanguage" datatype="bool" default_value="false" />
+	<UserPref name="multilanguage" datatype="bool" default_value="true" />
 	<UserPref name="remotedata" datatype="bool" default_value="false" />
 	<UserPref name="remotecss" datatype="bool" default_value="false" />
 	<UserPref name="remotereplacedata" datatype="bool" default_value="false" />
 	<UserPref name="simplereplace" datatype="bool" default_value="false" />
 	<UserPref name="dynamicheight" datatype="bool" default_value="false" />
-	<UserPref name="usebaseurl" datatype="bool" default_value="false" />
+	<UserPref name="usebaseurl" datatype="bool" default_value="true" />
 	<UserPref name="htmlescape" datatype="bool" default_value="false" />
 
 	<Content type="html"><![CDATA[
@@ -60,11 +60,15 @@
 			baseURL=targetUrl[1];
 			baseFilename=targetUrl[2];
 
+			alert("baseURL:\n" + baseURL + "\n\nbaseFilename:\n" + baseFilename);
+
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
 			}
 
 			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
+
+			alert("gadgetURL:\n" + gadgetURL);
 
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
