@@ -226,6 +226,7 @@
 				
 				targetURL="<a href='"+targetURL+"'>"+ anchorText + "</a>";
 				targetURL=targetURL.replace(/\^\{l/gi,'').replace(/\}\^/g,'');
+				alert("targetURL\n"+ targetURL);
 				contentData=contentData.replace(result[i],targetURL);
 			
 			}	
