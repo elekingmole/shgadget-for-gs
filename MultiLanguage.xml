@@ -202,7 +202,7 @@
 
 		return contentData;
 	}
-
+//(?)は関係ない？wwwが取れない？
 	function addAnchor(){
 		var result = contentData.match(/\^\{(Lhttps?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)\}\^/g);
 		var extention="";
@@ -212,7 +212,7 @@
 		//alert(result);
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-
+				alert(result[i]);
 				
 				//alert("2: "+ targetURL);
 				if(result[i].indexOf("|") != -1){
