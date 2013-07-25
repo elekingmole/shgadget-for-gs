@@ -59,15 +59,11 @@
 			baseURL=targetUrl[1];
 			baseFilename=targetUrl[2];
 
-			alert("baseURL:\n" + baseURL + "\n\nbaseFilename:\n" + baseFilename);
-
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
 			}
 
 			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
-
-			alert("gadgetURL:\n" + gadgetURL);
 
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
@@ -299,6 +295,18 @@
 
 	function doFork(targetBln,targetData,async,defaultMethod){
 		if(getBln(targetBln)){
+			var extractedData=extractURL(targetData);
+			if(extractedData != null){
+				getRemoteData(extractedData,async);
+			}
+		}
+
+		defaultMethod();
+		return;
+	}
+
+	/*function doFork(targetBln,targetData,async,defaultMethod){
+		if(getBln(targetBln)){
 			if(targetData.substring(0,4)=="http"){
 				getRemoteData(targetData.substring(0,targetData.length),async);
 				return;
@@ -310,7 +318,7 @@
 
 		defaultMethod();
 		return;
-	}
+	}*/
 
 	function to(object){
 		if(!(typeof object === "undefined") && object.length>0){
