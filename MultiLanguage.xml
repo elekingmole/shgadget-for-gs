@@ -14,6 +14,8 @@
 	<UserPref name="replaceSpecifier" datatype="string" default_value="%--%" />
 	<UserPref name="replaceWords" datatype="string" />
 	<UserPref name="autoexpand" datatype="bool" default_value="false" />
+	<UserPref name="autoanchor" datatype="bool" default_value="false" />
+	<UserPref name="bsntobr" datatype="bool" default_value="true" />
 	<UserPref name="multilanguage" datatype="bool" default_value="true" />
 	<UserPref name="remotedata" datatype="bool" default_value="false" />
 	<UserPref name="remotecss" datatype="bool" default_value="false" />
@@ -60,7 +62,7 @@
 			baseURL=targetUrl[1];
 			baseFilename=targetUrl[2];
 
-			alert("baseURL:\n" + baseURL + "\n\nbaseFilename:\n" + baseFilename);
+			//alert("baseURL:\n" + baseURL + "\n\nbaseFilename:\n" + baseFilename);
 
 			if(baseFilename.indexOf(".") != -1){
 				baseFilename = baseFilename.split(".")[0];
@@ -68,7 +70,7 @@
 
 			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
 
-			alert("gadgetURL:\n" + gadgetURL);
+			//alert("gadgetURL:\n" + gadgetURL);
 
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
@@ -157,13 +159,17 @@
 			if(getBln('autoexpand')){
 				contendData = doExpandURL();
 			}
-
-			//addAnchor
-
-			contentData = addAnchor();
+			
+			if(getBln('autoAnchor')){
+				contentData = addAnchor();
+			}
+			
+			if(getBln('bsntobr')){
+				contentData = contentData.replace(/\n/g,'<br>');
+			}
 
 //\n to <br>を追加する
-			return contentData.replace(/\n/g,'<br>');;
+			return contentData;
 		}
 	}
 
@@ -400,7 +406,7 @@
 
 	function init() {
 		initStringValue(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape','autoexpand'));
+		initBoolValue(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape','autoexpand','bsntobr','autoanchor'));
 		update();
 	}
 
@@ -462,7 +468,7 @@
 
 	function update() {
 		updatePrefs(new Array('content','css','splitword','preprocessjsURL','replaceSpecifier','replaceWords'));
-		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape','autoexpand'));
+		updatePrefsBln(new Array('dynamicheight','multilanguage','remotedata','remotecss','remotereplacedata','simplereplace','usebaseurl','htmlescape','autoexpand','bsntobr','autoanchor'));
 	}
 </script>
 
@@ -510,6 +516,16 @@
 	<tr>
 		<td>
 			<input type="checkbox" id="autoexpand" onClick="update()">autoexpand
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="bsntobr" onClick="update()">bsntobr
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="checkbox" id="autoanchor" onClick="update()">bsntobr
 		</td>
 	</tr>
 	<tr>
