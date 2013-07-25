@@ -49,7 +49,7 @@
 	}
 
 	function extractURL(sourceData){
-		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
+		return sourceData.match(/(^https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
 	}
 
 	function setupData(){
@@ -64,7 +64,7 @@
 				baseFilename = baseFilename.split(".")[0];
 			}
 
-			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+/);
+			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(^https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
 
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
@@ -204,7 +204,7 @@
 	}
 
 	function addAnchor(){
-		var result = contentData.match(/\^\{(Lhttps?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)\}\^/g);
+		var result = contentData.match(/\^\{(Lhttps?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)\}\^/gi);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
