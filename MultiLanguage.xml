@@ -224,9 +224,9 @@
 
 				//.match(/(https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
 				
-				targetURL="<a href='"+targetURL+"'>"+ anchorText + "</a>";
+				targetURL="<a href='"+targetURL+"' target='_blank' >"+ anchorText + "</a>";
 				targetURL=targetURL.replace(/\^\{l/gi,'').replace(/\}\^/g,'');
-				alert("targetURL\n"+ targetURL);
+				//alert("targetURL\n"+ targetURL);
 				contentData=contentData.replace(result[i],targetURL);
 			
 			}	
