@@ -51,24 +51,13 @@
 		setupData();
 	}
 
-	function setBaseURL(){
-		var targetUrl=extractURL(contentData);
-		baseURL=targetUrl[1];
-		baseFilename=targetUrl[2];
-
-		if(baseFilename.indexOf(".") != -1){
-			baseFilename = baseFilename.split(".")[0];
-		}
-
-		gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
-	}
-
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 
 		if(boolbu){
 			setBaseURL();
 		}
+
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
 
@@ -86,29 +75,7 @@
 		setupReplaceData();
 	}
 
-	function doForkEx(targetData,targetBool,targetFilename,async,defaultMethod){
-		
-		if(to(targetData)){
-			targetData=getTargetLangData(targetData);
-			if(targetBool){
-				if(boolbu){
-					targetData=decodeURI(baseURL+targetData);
-				}
-				getRemoteData(targetData,async);
-				return;
-			}
-
-		}else{
-			if(targetBool && boolbu){
-				targetData=decodeURI(baseURL+targetFilename);
-				getRemoteData(targetData,async);
-				return;
-			}
-		}
-
-		defaultMethod();
-		return;
-	}
+	
 
 	function setupReplaceData(){
 		if(to(cssData)){
@@ -279,6 +246,19 @@
 		return contentData;
 	}
 
+	function setBaseURL(){
+		var targetUrl=extractURL(contentData);
+		baseURL=targetUrl[1];
+		baseFilename=targetUrl[2];
+
+		if(baseFilename.indexOf(".") != -1){
+			baseFilename = baseFilename.split(".")[0];
+		}
+
+		gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
+	}
+
+
 	function extractURL(sourceData){
 		return sourceData.match(/(^https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/);
 	}
@@ -289,6 +269,30 @@
 			alert(extractedData[0]);
 			if(extractedData[0] != null){
 				getRemoteData(extractedData[0],async);
+			}
+		}
+
+		defaultMethod();
+		return;
+	}
+
+	function doForkEx(targetData,targetBool,targetFilename,async,defaultMethod){
+		
+		if(to(targetData)){
+			targetData=getTargetLangData(targetData);
+			if(targetBool){
+				if(boolbu){
+					targetData=decodeURI(baseURL+targetData);
+				}
+				getRemoteData(targetData,async);
+				return;
+			}
+
+		}else{
+			if(targetBool && boolbu){
+				targetData=decodeURI(baseURL+targetFilename);
+				getRemoteData(targetData,async);
+				return;
 			}
 		}
 
