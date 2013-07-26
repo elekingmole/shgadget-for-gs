@@ -268,9 +268,10 @@
 	function doFork(targetBln,targetData,async,defaultMethod){
 		if(getBln(targetBln)){
 			var extractedData=extractURL(targetData);
-			alert(extractedData[0]);
+			alert("expandedData : "*extractedData[0]);
 			if(extractedData[0] != null){
 				getRemoteData(extractedData[0],async);
+				return;
 			}
 		}
 
