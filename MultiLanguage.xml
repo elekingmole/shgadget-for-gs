@@ -58,8 +58,6 @@
 			setBaseURL();
 		}
 
-		alert("setupData : " + contentData);
-
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
 
@@ -69,7 +67,6 @@
 	}
 
 	function setupCssData(){
-		alert("setupCssData : " + contentData);
 		doForkEx(cssData,boolrc,"def.css",getCssData,setupReplaceData);
 	}
 
@@ -82,7 +79,6 @@
 		if(to(cssData)){
 			returnHtml += htmlUnescape(cssData);
 		}
-		alert("setupReplaceData : " + contentData);
 		doForkEx(replaceData,boolrd,"def.rpw",getReplaceData,doProcessData);
 	}
 
@@ -118,8 +114,6 @@
 				contentData = contentData.replace(/\n/g,'<br>');
 			}
 
-			alert("changeData : " + contentData);
-
 			return contentData;
 		}
 	}
@@ -127,7 +121,7 @@
 	function doReplaceWords(){
 		var specifier =  "__UP_replaceSpecifier__";
 		var tempWords = "";
-		var replaceWords = "";//new array?
+		var replaceWords = "";
 		var tempTargetWord;
 		var tempReplaceWord;
 		var prefix=specifier.substring(0,specifier.length/2);
@@ -140,7 +134,7 @@
 			if(tempWords[1].length>0){
 				if(tempWords[1].indexOf(specifier) != -1){
 					replaceWords = tempWords[1].split(specifier);
-				}else{//ここPush？
+				}else{
 					replaceWords = tempWords[1];
 				}
 
@@ -163,31 +157,25 @@
 
 		return contentData;
 	}
-//(?)は関係ない？wwwが取れない？
+
 	function addAnchor(){
 		var result = contentData.match(/\^\{(Lhttps?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/?)(.+)\}\^/g);
 		var extention="";
 		var targetURL="";
 		var anchorText="";
-		//alert("1: "+ targetURL);
-		//alert(result);
+
 		if(result != null){
 			for(var i = 0;i<result.length;i++){
-				//alert(result[i]);
-				
-				//alert("2: "+ targetURL);
+
 				if(result[i].indexOf("|") != -1){
 					targetURL=result[i].split("|")[0];
 					anchorText=result[i].split("|")[1];
 				}else{
 					anchorText=targetURL=result[i];
 				}
-
-				//.match(/(https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+\/)(.+)/)
 				
 				targetURL="<a href='"+targetURL+"' target='_blank' >"+ anchorText + "</a>";
 				targetURL=targetURL.replace(/\^\{l/gi,'').replace(/\}\^/g,'');
-				//alert("targetURL\n"+ targetURL);
 				contentData=contentData.replace(result[i],targetURL);
 			
 			}	
@@ -268,7 +256,7 @@
 	function doFork(targetBln,targetData,async,defaultMethod){
 		if(getBln(targetBln)){
 			var extractedData=extractURL(targetData);
-			alert("expandedData : "+extractedData[0]);
+			
 			if(extractedData[0] != null){
 				getRemoteData(extractedData[0],async);
 				return;
