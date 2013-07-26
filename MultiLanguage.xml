@@ -51,20 +51,23 @@
 		setupData();
 	}
 
+	function setBaseURL(){
+		var targetUrl=extractURL(contentData);
+		baseURL=targetUrl[1];
+		baseFilename=targetUrl[2];
+
+		if(baseFilename.indexOf(".") != -1){
+			baseFilename = baseFilename.split(".")[0];
+		}
+
+		gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
+	}
+
 	function setupData(){
 		contentData=getTargetLangData(contentData);
 
 		if(boolbu){
-			var targetUrl=extractURL(contentData);
-			baseURL=targetUrl[1];
-			baseFilename=targetUrl[2];
-
-			if(baseFilename.indexOf(".") != -1){
-				baseFilename = baseFilename.split(".")[0];
-			}
-
-			gadgetURL= (location.href).split("&parent=")[1].split("#")[0].match(/(?:^https?)(?::\/\/[-_.!~*\'()a-zA-Z0-9;\/:\@&=+\$,%#]+)/);
-
+			setBaseURL();
 		}
 		doFork("remotedata",contentData,getContentData,setupCssData);
 	}
